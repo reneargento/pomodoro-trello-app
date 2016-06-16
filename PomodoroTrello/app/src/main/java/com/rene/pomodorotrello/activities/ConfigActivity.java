@@ -14,6 +14,10 @@ public class ConfigActivity extends AppCompatActivity {
         setContentView(R.layout.activity_config);
 
         TrelloController trelloController = new TrelloController();
-        trelloController.login(ConfigActivity.this);
+        if (!trelloController.isConnected(getApplicationContext())){
+            trelloController.login(ConfigActivity.this);
+        }
+
+
     }
 }
