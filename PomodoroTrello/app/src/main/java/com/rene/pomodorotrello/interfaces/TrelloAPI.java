@@ -14,8 +14,8 @@ import retrofit2.http.Path;
 
 public interface TrelloAPI {
 
-    @GET("authorize")
-    Call<> 
+    //@GET("authorize")
+    //Call<>
 
     @GET("boards/{boardId}")
     Call<List<Board>> boardsList(@Path("boardId") String boardId);

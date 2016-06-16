@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/PomodoroTrello.iml" filepath="$PROJECT_DIR$/PomodoroTrello.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/oauthio/oauthio.iml" filepath="$PROJECT_DIR$/oauthio/oauthio.iml" />
     </modules>
   </component>
 </project>
