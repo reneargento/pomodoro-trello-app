@@ -1,7 +1,5 @@
 package com.rene.pomodorotrello.vo;
 
-import java.util.List;
-
 /**
  * Created by rene on 6/14/16.
  */
@@ -11,7 +9,7 @@ public class Board {
     public String id;
     public String name;
     public String desc;
-    public List<BoardList> lists;
+    public java.util.List lists;
 
     /**
      *

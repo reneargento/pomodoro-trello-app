@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.rene.pomodorotrello.R;
-import com.rene.pomodorotrello.controllers.TrelloController;
+import com.rene.pomodorotrello.controllers.SessionController;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -21,8 +21,8 @@ public class SplashActivity extends AppCompatActivity {
     private void sendUserToNextActivity(){
         Intent intent;
 
-        TrelloController trelloController = new TrelloController();
-        if (!trelloController.isConnected(getApplicationContext())){
+        SessionController sessionController = new SessionController();
+        if (!sessionController.isConnected(getApplicationContext())){
             intent = new Intent(this, TasksActivity.class);
         } else {
             intent = new Intent(this, ConfigActivity.class);

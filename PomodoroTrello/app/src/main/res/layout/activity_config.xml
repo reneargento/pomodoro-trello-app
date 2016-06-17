@@ -1,36 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_config"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.rene.pomodorotrello.activities.ConfigActivity">
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
 
-    <TextView
-        android:text="@string/select_board"
+    <include
+        layout="@layout/app_bar_tasks"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
         android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_tasks"
+        app:menu="@menu/activity_tasks_drawer" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="@+id/activity_config"
-        android:layout_marginLeft="88dp"
-        android:layout_marginStart="88dp"
-        app:layout_constraintTop_toTopOf="@+id/activity_config"
-        android:layout_marginTop="64dp" />
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="64dp"
+            android:text="@string/select_board"
+            android:id="@+id/textView2" />
 
 
-    <Spinner
-        android:id="@+id/board_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintRight_toRightOf="@+id/activity_config"
-        android:layout_marginRight="72dp"
-        android:layout_marginEnd="72dp"
-        app:layout_constraintBottom_toBottomOf="@+id/activity_config"
-        android:layout_marginBottom="430dp">
+        <Spinner
+            android:id="@+id/board_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center_horizontal">
+        </Spinner>
+
+    </LinearLayout>
 
 
-
-    </Spinner>
-
-</android.support.constraint.ConstraintLayout>
+</android.support.v4.widget.DrawerLayout>
