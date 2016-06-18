@@ -17,103 +17,10 @@
         app:headerLayout="@layout/nav_header_tasks"
         app:menu="@menu/main_tasks_drawer" />
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="45dp"
-            android:text="@string/select_board"
-            android:id="@+id/text_view_board" />
-
-        <Spinner
-            android:id="@+id/board_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_gravity="center_horizontal">
-        </Spinner>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginLeft="30dp"
-                android:text="@string/select_todo_list"
-                android:id="@+id/text_view_todo" />
-
-            <Spinner
-                android:id="@+id/todo_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </Spinner>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginLeft="30dp"
-                android:text="@string/select_doing_list"
-                android:id="@+id/text_view_doing" />
-
-            <Spinner
-                android:id="@+id/doing_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </Spinner>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginLeft="30dp"
-                android:text="@string/select_done_list"
-                android:id="@+id/text_view_done" />
-
-            <Spinner
-                android:id="@+id/done_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            </Spinner>
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/save_config_button"
-            android:text="@string/save_config_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:layout_gravity="center_horizontal"/>
-
-
-    </LinearLayout>
-
+        android:layout_height="match_parent"
+        android:id="@+id/mainFrame">
+    </FrameLayout>
 
 </android.support.v4.widget.DrawerLayout>
