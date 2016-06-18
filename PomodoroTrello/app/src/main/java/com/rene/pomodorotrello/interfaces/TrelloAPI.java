@@ -1,6 +1,7 @@
 package com.rene.pomodorotrello.interfaces;
 
 import com.rene.pomodorotrello.vo.Board;
+import com.rene.pomodorotrello.vo.BoardList;
 
 import java.util.List;
 
@@ -17,8 +18,11 @@ public interface TrelloAPI {
 
     //https://api.trello.com/1/members/me/boards?key=[application_key]&token=[optional_auth_token]
     @GET("members/me/boards")
-    Call<List<Board>> boardsList(@Query("key") String key, @Query("token") String token);
+    Call<List<Board>> getBoards(@Query("key") String key,
+                                @Query("token") String token);
 
-    @GET("boards/{boardId}")
-    Call<List<Board>> boardsList(@Path("boardId") String boardId);
+    @GET("boards/{boardId}/lists")
+    Call<List<BoardList>> getBoardLists(@Path("boardId") String boardId,
+                                        @Query("key") String key,
+                                        @Query("token") String token);
 }

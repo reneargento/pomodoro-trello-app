@@ -7,9 +7,9 @@ import com.rene.pomodorotrello.interfaces.ItemRetriever;
 import com.rene.pomodorotrello.interfaces.TrelloAPI;
 import com.rene.pomodorotrello.util.Constants;
 import com.rene.pomodorotrello.vo.Board;
+import com.rene.pomodorotrello.vo.BoardList;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -19,14 +19,12 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 /**
- * Created by rene on 6/16/16.
+ * Created by rene on 6/17/16.
  */
 
-public class BoardController {
+public class BoardListController {
 
-    static public HashMap<String, String> boardCache = new HashMap<>();
-
-    public void getBoards(Context context, final ItemRetriever itemRetriever) {
+    public void getBoardLists(Context context, final ItemRetriever itemRetriever, String boardId) {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -38,44 +36,34 @@ public class BoardController {
         if (token != null) {
             TrelloAPI trelloAPI = retrofit.create(TrelloAPI.class);
 
-            Call<List<Board>> boardListCall = trelloAPI.getBoards(Constants.KEY, token);
+            Call<List<BoardList>> boardListsCall = trelloAPI.getBoardLists(boardId, Constants.KEY, token);
 
-            boardListCall.enqueue(new Callback<List<Board>>() {
+            boardListsCall.enqueue(new Callback<List<BoardList>>() {
                 @Override
-                public void onResponse(Call<List<Board>> call, Response<List<Board>> response) {
-                    List<Board> boardList = response.body();
+                public void onResponse(Call<List<BoardList>> call, Response<List<BoardList>> response) {
+                    List<BoardList> boardList = response.body();
                     itemRetriever.retrieveItems(boardList);
                 }
 
                 @Override
-                public void onFailure(Call<List<Board>> call, Throwable t) {
+                public void onFailure(Call<List<BoardList>> call, Throwable t) {
                     t.printStackTrace();
                 }
             });
         }
     }
 
-    public List<String> getBoardsNamesFromBoardList(List<Board> boardList) {
+    public List<String> getListsNamesFromBoardList(List<BoardList> boardList) {
 
-        int averageBoardNumber = 5;
+        int averageListNumber = 3;
 
-        List<String> boardNames = new ArrayList<>(averageBoardNumber);
+        List<String> listNames = new ArrayList<>(averageListNumber);
 
-        for (Board board : boardList) {
-            boardNames.add(board.name);
+        for (BoardList list : boardList) {
+            listNames.add(list.name);
         }
 
-        return boardNames;
-    }
-
-    public void saveBoardDataOnCache(List<Board> boardList) {
-
-        boardCache.clear();
-
-        for (Board board : boardList) {
-            boardCache.put(board.name, board.id);
-        }
-
+        return listNames;
     }
 
 }
