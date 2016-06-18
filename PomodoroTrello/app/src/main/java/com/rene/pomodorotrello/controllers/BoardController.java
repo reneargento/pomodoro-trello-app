@@ -24,7 +24,7 @@ import retrofit2.Retrofit;
 
 public class BoardController {
 
-    static public HashMap<String, String> boardCache = new HashMap<>();
+    public static HashMap<String, String> boardCache = new HashMap<>();
 
     public void getBoards(Context context, final ItemRetriever itemRetriever) {
 
@@ -44,6 +44,8 @@ public class BoardController {
                 @Override
                 public void onResponse(Call<List<Board>> call, Response<List<Board>> response) {
                     List<Board> boardList = response.body();
+
+                    saveBoardDataOnCache(boardList);
                     itemRetriever.retrieveItems(boardList);
                 }
 
@@ -68,7 +70,7 @@ public class BoardController {
         return boardNames;
     }
 
-    public void saveBoardDataOnCache(List<Board> boardList) {
+    private void saveBoardDataOnCache(List<Board> boardList) {
 
         boardCache.clear();
 

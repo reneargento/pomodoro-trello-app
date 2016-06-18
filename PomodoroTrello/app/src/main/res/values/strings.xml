@@ -15,4 +15,11 @@
     <string name="menu_tasks">Tasks</string>
     <string name="menu_pomodoro">Pomodoro</string>
     <string name="menu_settings">Settings</string>
+
+    <string name="save_config_button">Save</string>
+
+    //Alert dialog
+    <string name="success_value">Success</string>
+    <string name="values_saved">Values saved</string>
+    <string name="Ok">Ok</string>
 </resources>

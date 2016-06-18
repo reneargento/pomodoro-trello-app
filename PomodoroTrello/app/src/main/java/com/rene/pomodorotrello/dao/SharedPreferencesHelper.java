@@ -14,6 +14,11 @@ public class SharedPreferencesHelper {
     public static final String SHARED_PREFERENCES_KEY = "pomodorotrellosp";
     public static final String TOKEN_KEY = "token";
 
+    public static final String SELECTED_BOARD_KEY = "selectedBoard";
+    public static final String SELECTED_TODO_LIST_KEY = "selectedToDoList";
+    public static final String SELECTED_DOING_LIST_KEY = "selectedDoingList";
+    public static final String SELECTED_DONE_LIST_KEY = "selectedDoneList";
+
     private static SharedPreferencesHelper sharedPreferencesHelper;
     private static SharedPreferences sharedPreferences;
 

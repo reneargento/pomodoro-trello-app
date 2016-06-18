@@ -10,6 +10,7 @@ import com.rene.pomodorotrello.vo.Board;
 import com.rene.pomodorotrello.vo.BoardList;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -23,6 +24,8 @@ import retrofit2.Retrofit;
  */
 
 public class BoardListController {
+
+    public static HashMap<String, String> listCache = new HashMap<>();
 
     public void getBoardLists(Context context, final ItemRetriever itemRetriever, String boardId) {
 
@@ -42,6 +45,8 @@ public class BoardListController {
                 @Override
                 public void onResponse(Call<List<BoardList>> call, Response<List<BoardList>> response) {
                     List<BoardList> boardList = response.body();
+
+                    saveBoardListDataOnCache(boardList);
                     itemRetriever.retrieveItems(boardList);
                 }
 
@@ -64,6 +69,16 @@ public class BoardListController {
         }
 
         return listNames;
+    }
+
+    private void saveBoardListDataOnCache(List<BoardList> boardList) {
+
+        listCache.clear();
+
+        for (BoardList list : boardList) {
+            listCache.put(list.name, list.id);
+        }
+
     }
 
 }
