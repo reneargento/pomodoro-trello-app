@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">PomodoroTrello</string>
-    <string name="title_activity_tasks">TasksActivity</string>
+    <string name="title_activity_config">Configuration</string>
+    <string name="title_activity_tasks">Tasks</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

@@ -1,5 +1,6 @@
 package com.rene.pomodorotrello.activities;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
@@ -37,14 +38,14 @@ public class ConfigActivity extends AppCompatActivity implements NavigationView.
         int id = item.getItemId();
 
         if (id == R.id.nav_tasks) {
-           // configFragment = new ConfigFragment();
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.mainFrame, configFragment);
-            fragmentTransaction.commit();
+            Intent intent = new Intent(this, TasksActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_pomodoro) {
 
         } else if (id == R.id.nav_settings) {
-
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.mainFrame, configFragment);
+            fragmentTransaction.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -57,6 +58,16 @@ public class ConfigActivity extends AppCompatActivity implements NavigationView.
         super.onUserInteraction();
         if (configFragment != null) {
             configFragment.userIsInteracting = true;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
     }
 

@@ -165,7 +165,7 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
                     configController.saveSettings(getActivity().getApplicationContext(), boardName, toDoListName,
                             doingListName, doneListName);
 
-                    showSavedValuesDialog();
+                    showSavedValuesDialogMessage();
                 }
             });
         }
@@ -251,7 +251,7 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
 
     }
 
-    private void showSavedValuesDialog() {
+    private void showSavedValuesDialogMessage() {
 
         new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.success_value)
