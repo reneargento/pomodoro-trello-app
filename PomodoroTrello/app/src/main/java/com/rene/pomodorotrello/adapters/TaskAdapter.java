@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.rene.pomodorotrello.R;
-import com.rene.pomodorotrello.vo.Card;
+import com.rene.pomodorotrello.vo.CardList;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -17,30 +19,29 @@ import java.util.List;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
-    private List<Card> cardList;
+    private List<CardList> cardList;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView nameTextView;
 
-        public ViewHolder(TextView nameTextView) {
-            super(nameTextView);
-            this.nameTextView = nameTextView;
+        public ViewHolder(View view) {
+            super(view);
+
+            this.nameTextView = (TextView) view.findViewById(R.id.card_name);
         }
     }
 
-    public TaskAdapter(List<Card> cardList) {
+    public TaskAdapter(List<CardList> cardList) {
         this.cardList = cardList;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TaskAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.adapter_card, parent, false);
 
-        TextView name = (TextView) view.findViewById(R.id.card_name);
-
-        return new ViewHolder(name);
+        return new ViewHolder(view);
     }
 
     @Override

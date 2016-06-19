@@ -22,7 +22,7 @@ public class SplashActivity extends AppCompatActivity {
         Intent intent;
 
         SessionController sessionController = new SessionController();
-        if (!sessionController.isConnected(getApplicationContext())){
+        if (sessionController.isConnected(getApplicationContext())){
             intent = new Intent(this, TasksActivity.class);
         } else {
             intent = new Intent(this, ConfigActivity.class);

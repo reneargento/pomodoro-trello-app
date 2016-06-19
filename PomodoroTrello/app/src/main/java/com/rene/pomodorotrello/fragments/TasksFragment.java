@@ -11,14 +11,26 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.rene.pomodorotrello.R;
+import com.rene.pomodorotrello.adapters.TaskAdapter;
+import com.rene.pomodorotrello.controllers.TaskController;
+import com.rene.pomodorotrello.interfaces.ItemRetriever;
+import com.rene.pomodorotrello.vo.CardList;
+
+import java.util.List;
 
 public class TasksFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
+    //To do list
+    private RecyclerView toDoListRecyclerView;
+    private RecyclerView.Adapter toDoListAdapter;
+    private RecyclerView.LayoutManager toDoListLayoutManager;
+
+    //Doing list
+    private RecyclerView doingListRecyclerView;
+    private RecyclerView.Adapter doingListAdapter;
+    private RecyclerView.LayoutManager doingListLayoutManager;
 
     @Override
     public void onAttach(Context context) {
@@ -41,13 +53,26 @@ public class TasksFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tasks, container, false);
 
-        //Recycler view
-        recyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
+        initToDoRecyclerView(view);
 
         return view;
+    }
+    private void initToDoRecyclerView(View view) {
+        toDoListRecyclerView = (RecyclerView) view.findViewById(R.id.todo_recycler_view);
+        toDoListRecyclerView.setHasFixedSize(true);
+        toDoListLayoutManager = new LinearLayoutManager(getActivity());
+        toDoListRecyclerView.setLayoutManager(toDoListLayoutManager);
+
+        TaskController taskController = new TaskController();
+        taskController.getToDoCards(getActivity().getApplicationContext(), new ItemRetriever() {
+            @Override
+            public void retrieveItems(Object items) {
+                List<CardList> toDoCardList = (List<CardList>) items;
+
+                toDoListAdapter = new TaskAdapter(toDoCardList);
+                toDoListRecyclerView.setAdapter(toDoListAdapter);
+            }
+        });
     }
 
     public void onButtonPressed(Uri uri) {

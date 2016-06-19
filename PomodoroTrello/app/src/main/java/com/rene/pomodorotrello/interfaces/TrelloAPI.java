@@ -27,9 +27,8 @@ public interface TrelloAPI {
                                         @Query("key") String key,
                                         @Query("token") String token);
 
-    @GET("lists/{listId}")
+    @GET("lists/{listId}/cards")
     Call<List<CardList>> getListCards(@Path("listId") String listId,
-                                      //@Query("card_fields") String cardFields,
                                       @Query("key") String key,
                                       @Query("token") String token);
 }
