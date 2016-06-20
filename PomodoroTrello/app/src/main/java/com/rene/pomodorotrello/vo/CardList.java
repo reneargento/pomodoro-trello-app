@@ -6,10 +6,8 @@ import java.util.List;
  * Created by rene on 6/19/16.
  */
 
-public class CardList {
+public class CardList extends TrelloObject {
 
-    public String id;
-    public String name;
     public List<Card> cards;
 
 }

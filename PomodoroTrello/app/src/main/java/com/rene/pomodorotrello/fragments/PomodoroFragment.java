@@ -13,15 +13,21 @@ import com.rene.pomodorotrello.R;
 import com.rene.pomodorotrello.controllers.BoardController;
 import com.rene.pomodorotrello.controllers.BoardListController;
 import com.rene.pomodorotrello.controllers.SessionController;
+import com.rene.pomodorotrello.controllers.TaskController;
+import com.rene.pomodorotrello.dao.ObjectStreamHelper;
 import com.rene.pomodorotrello.dao.SharedPreferencesHelper;
 import com.rene.pomodorotrello.interfaces.ItemRetriever;
+import com.rene.pomodorotrello.util.Constants;
 import com.rene.pomodorotrello.vo.BoardList;
+import com.rene.pomodorotrello.vo.CardList;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static com.rene.pomodorotrello.R.id.doing_spinner;
 
+@SuppressWarnings("unchecked")
 public class PomodoroFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private Spinner doingListSpinner;
@@ -63,25 +69,20 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         if (sessionController.isConnected(getContext())){
 
             SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(getContext());
-            String boardName = sharedPreferencesHelper.getValue(SharedPreferencesHelper.SELECTED_BOARD_KEY);
-            String boardId = null;
+            String doingListName = sharedPreferencesHelper.getValue(SharedPreferencesHelper.SELECTED_DOING_LIST_KEY);
 
-            if (boardName != null) {
-                boardId = BoardController.boardCache.get(boardName);
-            }
-
-            if (boardId != null) {
-                //User is connected and has selected a board
-                final BoardListController boardlistController = new BoardListController();
-                boardlistController.getBoardLists(getContext(), new ItemRetriever() {
+            if (doingListName != null) {
+                //User is connected and has selected a list
+                final TaskController taskController = new TaskController();
+                taskController.getCardsFromList(getContext(), new ItemRetriever() {
                     @Override
                     public void retrieveItems(Object items) {
-                        List<BoardList> doingList = (List<BoardList>) items;
+                        List<CardList> doingList = (List<CardList>) items;
 
-                        List<String> boardListNames = boardlistController.getListNamesFromBoardList(doingList);
-                        initSpinnerAdapter(doingListSpinner, doingListSpinnerAdapter, boardListNames);
+                        List<String> doingListNames = taskController.getNamesFromList(doingList);
+                        initSpinnerAdapter(doingListSpinner, doingListSpinnerAdapter, doingListNames);
                     }
-                }, boardId);
+                }, Constants.DOING_ID);
             } else{
                 //User is connected, but has not selected a board  yet
                 List<String> defaultLabel = new ArrayList<>(1);

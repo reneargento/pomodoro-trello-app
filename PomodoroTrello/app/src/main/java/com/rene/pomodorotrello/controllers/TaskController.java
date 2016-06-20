@@ -22,7 +22,7 @@ import retrofit2.Retrofit;
  * Created by rene on 6/19/16.
  */
 
-public class TaskController {
+public class TaskController extends TrelloObjectController {
 
     public void getCardsFromList(Context context, final ItemRetriever itemRetriever, int listId) {
         switch (listId) {
@@ -80,10 +80,7 @@ public class TaskController {
 
             if (listId != null) {
 
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(Constants.BASE_URL)
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
+                Retrofit retrofit = RetrofitController.getInstance();
 
                 String token = SharedPreferencesHelper.getInstance(context).getValue(SharedPreferencesHelper.TOKEN_KEY);
 

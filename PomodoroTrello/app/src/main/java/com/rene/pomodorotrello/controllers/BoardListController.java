@@ -22,16 +22,13 @@ import retrofit2.Retrofit;
  * Created by rene on 6/17/16.
  */
 
-public class BoardListController {
+public class BoardListController extends TrelloObjectController {
 
     static HashMap<String, String> listCache = new HashMap<>();
 
     public void getBoardLists(Context context, final ItemRetriever itemRetriever, String boardId) {
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        Retrofit retrofit = RetrofitController.getInstance();
 
         String token = SharedPreferencesHelper.getInstance(context).getValue(SharedPreferencesHelper.TOKEN_KEY);
 
@@ -55,19 +52,6 @@ public class BoardListController {
                 }
             });
         }
-    }
-
-    public List<String> getListNamesFromBoardList(List<BoardList> boardList) {
-
-        int averageListNumber = 3;
-
-        List<String> listNames = new ArrayList<>(averageListNumber);
-
-        for (BoardList list : boardList) {
-            listNames.add(list.name);
-        }
-
-        return listNames;
     }
 
     private void saveBoardListDataOnCache(List<BoardList> boardList) {

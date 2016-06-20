@@ -22,6 +22,7 @@ import com.rene.pomodorotrello.interfaces.ConnectionCallback;
 import com.rene.pomodorotrello.interfaces.ItemRetriever;
 import com.rene.pomodorotrello.vo.Board;
 import com.rene.pomodorotrello.vo.BoardList;
+import com.rene.pomodorotrello.vo.TrelloObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,7 +116,7 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
                 public void retrieveItems(Object items) {
                     List<Board> boardList = (List<Board>) items;
 
-                    List<String> boardNames = boardController.getBoardsNamesFromBoardList(boardList);
+                    List<String> boardNames = boardController.getNamesFromList(boardList);
                     initSpinnerAdapter(boardSpinner, boardSpinnerAdapter, boardNames);
 
                     loadListValues();
@@ -214,7 +215,7 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
             @Override
             public void retrieveItems(Object items) {
                 List<BoardList> boardList = (List<BoardList>) items;
-                List<String> boardListNames = boardListController.getListNamesFromBoardList(boardList);
+                List<String> boardListNames = boardListController.getNamesFromList(boardList);
 
                 initSpinnerAdapter(toDoListSpinner, toDoListSpinnerAdapter, boardListNames);
                 initSpinnerAdapter(doingListSpinner, doingListSpinnerAdapter, boardListNames);

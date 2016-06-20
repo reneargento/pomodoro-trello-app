@@ -22,13 +22,15 @@ public class ConfigController {
         sharedPreferencesHelper.saveValue(SharedPreferencesHelper.SELECTED_DOING_LIST_KEY, doingListName);
         sharedPreferencesHelper.saveValue(SharedPreferencesHelper.SELECTED_DONE_LIST_KEY, doneListName);
 
-        //Saving the selected lists' IDs and Name's mapping
+        //Saving the selected board and lists' IDs and Name's mapping
         if (BoardListController.listCache != null) {
+            String boardId = BoardController.boardCache.get(boardName);
             String toDoListId = BoardListController.listCache.get(toDoListName);
             String doingListId = BoardListController.listCache.get(doingListName);
             String doneListId = BoardListController.listCache.get(doneListName);
 
             HashMap<String, String> listMap = new HashMap<>();
+            listMap.put(boardName, boardId);
             listMap.put(toDoListName, toDoListId);
             listMap.put(doingListName, doingListId);
             listMap.put(doneListName, doneListId);

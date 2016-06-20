@@ -1,10 +1,11 @@
 package com.rene.pomodorotrello.vo;
 
 /**
- * Created by rene on 6/14/16.
+ * Created by rene on 6/20/16.
  */
 
-public class TrelloList {
+//Basic object for Trello objects
+public class TrelloObject {
 
     public String id;
     public String name;
