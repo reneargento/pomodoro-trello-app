@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.rene.pomodorotrello.R;
+import com.rene.pomodorotrello.fragments.PomodoroFragment;
 import com.rene.pomodorotrello.fragments.TasksFragment;
 import com.rene.pomodorotrello.util.Constants;
 
@@ -95,8 +96,9 @@ public class TasksActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_pomodoro) {
-
-        } else if (id == R.id.nav_settings) {
+            Intent intent = new Intent(this, PomodoroActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_config) {
             Intent intent = new Intent(this, ConfigActivity.class);
             startActivity(intent);
         }

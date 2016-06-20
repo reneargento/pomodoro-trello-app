@@ -35,5 +35,6 @@
     <string name="tab_tasks_title_done">Done</string>
 
     <string name="start_task">Start task</string>
+    <string name="select_task">Select Task</string>
 
 </resources>

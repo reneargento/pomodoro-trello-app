@@ -1,0 +1,21 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.rene.pomodorotrello.fragments.PomodoroFragment">
+
+    <TextView
+        android:id="@+id/doing_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="100dp"
+        android:gravity="center_horizontal"
+        android:text="@string/select_task" />
+
+    <Spinner
+        android:id="@+id/doing_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/doing_text_view" />
+
+</RelativeLayout>

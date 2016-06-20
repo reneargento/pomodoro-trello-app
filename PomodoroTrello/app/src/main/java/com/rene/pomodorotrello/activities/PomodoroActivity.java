@@ -1,7 +1,6 @@
 package com.rene.pomodorotrello.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -13,12 +12,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.rene.pomodorotrello.R;
-import com.rene.pomodorotrello.fragments.ConfigFragment;
+import com.rene.pomodorotrello.fragments.PomodoroFragment;
 
-public class ConfigActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        ConfigFragment.OnFragmentInteractionListener{
+public class PomodoroActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private ConfigFragment configFragment;
+    private PomodoroFragment pomodoroFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +35,9 @@ public class ConfigActivity extends AppCompatActivity implements NavigationView.
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        configFragment = new ConfigFragment();
+        pomodoroFragment = new PomodoroFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.mainFrame, configFragment);
+        fragmentTransaction.replace(R.id.mainFrame, pomodoroFragment);
         fragmentTransaction.commit();
     }
 
@@ -51,8 +49,8 @@ public class ConfigActivity extends AppCompatActivity implements NavigationView.
         if (id == R.id.nav_tasks) {
             Intent intent = new Intent(this, TasksActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_pomodoro) {
-            Intent intent = new Intent(this, PomodoroActivity.class);
+        } else if (id == R.id.nav_config) {
+            Intent intent = new Intent(this, ConfigActivity.class);
             startActivity(intent);
         }
 
@@ -64,23 +62,9 @@ public class ConfigActivity extends AppCompatActivity implements NavigationView.
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
-        if (configFragment != null) {
-            configFragment.userIsInteracting = true;
+
+        if (pomodoroFragment != null) {
+            pomodoroFragment.userIsInteracting = true;
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
 }

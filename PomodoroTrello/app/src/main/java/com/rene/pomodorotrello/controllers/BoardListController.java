@@ -24,7 +24,7 @@ import retrofit2.Retrofit;
 
 public class BoardListController {
 
-    public static HashMap<String, String> listCache = new HashMap<>();
+    static HashMap<String, String> listCache = new HashMap<>();
 
     public void getBoardLists(Context context, final ItemRetriever itemRetriever, String boardId) {
 
@@ -57,7 +57,7 @@ public class BoardListController {
         }
     }
 
-    public List<String> getListsNamesFromBoardList(List<BoardList> boardList) {
+    public List<String> getListNamesFromBoardList(List<BoardList> boardList) {
 
         int averageListNumber = 3;
 
