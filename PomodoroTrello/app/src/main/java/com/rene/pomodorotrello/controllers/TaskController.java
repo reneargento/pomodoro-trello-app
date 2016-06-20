@@ -24,7 +24,21 @@ import retrofit2.Retrofit;
 
 public class TaskController {
 
-    public void getToDoCards(Context context, final ItemRetriever itemRetriever) {
+    public void getCardsFromList(Context context, final ItemRetriever itemRetriever, int listId) {
+        switch (listId) {
+            case Constants.TO_DO_ID:
+                getToDoCards(context, itemRetriever);
+                break;
+            case Constants.DOING_ID:
+                getDoingCards(context, itemRetriever);
+                break;
+            case Constants.DONE_ID:
+                getDoneCards(context, itemRetriever);
+                break;
+        }
+    }
+
+    private void getToDoCards(Context context, final ItemRetriever itemRetriever) {
 
         SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(context);
         String toDoListName = sharedPreferencesHelper.getValue(SharedPreferencesHelper.SELECTED_TODO_LIST_KEY);
@@ -34,7 +48,7 @@ public class TaskController {
         }
     }
 
-    public void getDoingCards(Context context, final ItemRetriever itemRetriever) {
+    private void getDoingCards(Context context, final ItemRetriever itemRetriever) {
 
         SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(context);
         String doingListName = sharedPreferencesHelper.getValue(SharedPreferencesHelper.SELECTED_DOING_LIST_KEY);
@@ -44,7 +58,7 @@ public class TaskController {
         }
     }
 
-    public void getDoneCards(Context context, final ItemRetriever itemRetriever) {
+    private void getDoneCards(Context context, final ItemRetriever itemRetriever) {
 
         SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(context);
         String doneListName = sharedPreferencesHelper.getValue(SharedPreferencesHelper.SELECTED_DONE_LIST_KEY);

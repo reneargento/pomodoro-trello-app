@@ -15,12 +15,12 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.rene.pomodorotrello.R;
-import com.rene.pomodorotrello.activities.ConfigActivity;
 import com.rene.pomodorotrello.controllers.BoardController;
 import com.rene.pomodorotrello.controllers.BoardListController;
 import com.rene.pomodorotrello.controllers.ConfigController;
 import com.rene.pomodorotrello.controllers.SessionController;
 import com.rene.pomodorotrello.dao.SharedPreferencesHelper;
+import com.rene.pomodorotrello.interfaces.ConnectionCallback;
 import com.rene.pomodorotrello.interfaces.ItemRetriever;
 import com.rene.pomodorotrello.vo.Board;
 import com.rene.pomodorotrello.vo.BoardList;
@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.rene.pomodorotrello.R.id.board_spinner;
+import static com.rene.pomodorotrello.R.id.connect_config_button;
 import static com.rene.pomodorotrello.R.id.doing_spinner;
 import static com.rene.pomodorotrello.R.id.done_spinner;
 import static com.rene.pomodorotrello.R.id.save_config_button;
@@ -40,6 +41,7 @@ import static com.rene.pomodorotrello.R.id.todo_spinner;
  * {@link ConfigFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
+@SuppressWarnings("unchecked")
 public class ConfigFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private Spinner boardSpinner;
@@ -51,6 +53,8 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
     private ArrayAdapter toDoListSpinnerAdapter;
     private ArrayAdapter doingListSpinnerAdapter;
     private ArrayAdapter doneListSpinnerAdapter;
+
+    private Button connectButton;
 
     //Used to avoid calling spinner's onItemSelected in initialization
     public boolean userIsInteracting;
@@ -74,20 +78,18 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
 
         SessionController sessionController = new SessionController();
         if (!sessionController.isConnected(getActivity().getApplicationContext())){
-            sessionController.login(getActivity());
+            sessionController.login(getActivity(), new ConnectionCallback() {
+                @Override
+                public void connectionSuccessful() {
+                    connectionSuccessfulHandling();
+                }
+            });
         }
 
         View view = inflater.inflate(R.layout.fragment_config, container, false);
         initViews(view);
 
         return view;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -120,9 +122,10 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
             doneListSpinnerAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item);
         }
 
+        loadSpinners();
+    }
 
-        List<String> defaultLabel = new ArrayList<>(1);
-        defaultLabel.add("Connect to Trello");
+    private void loadSpinners() {
 
         SessionController sessionController = new SessionController();
         if (sessionController.isConnected(getActivity().getApplicationContext())){
@@ -139,14 +142,17 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
                     loadListValues();
                 }
             });
+
         } else {
             //User is not connected
+            List<String> defaultLabel = new ArrayList<>(1);
+            defaultLabel.add(getActivity().getResources().getString(R.string.connect_warning));
+
             initSpinnerAdapter(boardSpinner, boardSpinnerAdapter, defaultLabel);
             initSpinnerAdapter(toDoListSpinner, toDoListSpinnerAdapter, defaultLabel);
             initSpinnerAdapter(doingListSpinner, doingListSpinnerAdapter, defaultLabel);
             initSpinnerAdapter(doneListSpinner, doneListSpinnerAdapter, defaultLabel);
         }
-
     }
 
     private void initOtherElements(View view) {
@@ -168,6 +174,26 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
                     showSavedValuesDialogMessage();
                 }
             });
+
+            connectButton = (Button) view.findViewById(connect_config_button);
+        }
+
+        final SessionController sessionController = new SessionController();
+        if (!sessionController.isConnected(getContext()) && view != null) {
+
+            connectButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    sessionController.login(getContext(), new ConnectionCallback() {
+                        @Override
+                        public void connectionSuccessful() {
+                            connectionSuccessfulHandling();
+                        }
+                    });
+                }
+            });
+        } else {
+            connectButton.setVisibility(View.GONE);
         }
     }
 
@@ -192,6 +218,16 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
         //
     }
 
+    private void loadListValues() {
+        SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(getContext());
+        String selectedBoard = sharedPreferencesHelper.getValue(SharedPreferencesHelper.SELECTED_BOARD_KEY);
+
+        if (selectedBoard != null) {
+            String boardId = BoardController.boardCache.get(selectedBoard);
+            loadListItems(boardId);
+        }
+    }
+
     private void loadListItems(String boardId) {
 
         final BoardListController boardListController = new BoardListController();
@@ -211,16 +247,6 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
 
             }
         }, boardId);
-    }
-
-    private void loadListValues() {
-        SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(getActivity().getApplicationContext());
-        String selectedBoard = sharedPreferencesHelper.getValue(SharedPreferencesHelper.SELECTED_BOARD_KEY);
-
-        if (selectedBoard != null) {
-            String boardId = BoardController.boardCache.get(selectedBoard);
-            loadListItems(boardId);
-        }
     }
 
     private void setDefaultListItems() {
@@ -274,5 +300,20 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void connectionSuccessfulHandling() {
+        if (connectButton != null) {
+            connectButton.setVisibility(View.GONE);
+        }
+
+        loadSpinners();
+
+        List<String> selectBoardLabel = new ArrayList<>(1);
+        selectBoardLabel.add(getActivity().getResources().getString(R.string.select_board));
+
+        initSpinnerAdapter(toDoListSpinner, toDoListSpinnerAdapter, selectBoardLabel);
+        initSpinnerAdapter(doingListSpinner, doingListSpinnerAdapter, selectBoardLabel);
+        initSpinnerAdapter(doneListSpinner, doneListSpinnerAdapter, selectBoardLabel);
     }
 }

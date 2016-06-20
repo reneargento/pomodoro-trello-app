@@ -11,9 +11,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activities.ConfigActivity"
+            android:noHistory="true"
+            android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/title_activity_config">
         </activity>
-        <activity android:name=".activities.SplashActivity">
+        <activity android:name=".activities.SplashActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,6 +26,7 @@
         <activity
             android:name=".activities.TasksActivity"
             android:label="@string/title_activity_tasks"
+            android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>

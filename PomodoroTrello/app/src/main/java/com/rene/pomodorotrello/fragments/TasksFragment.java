@@ -6,14 +6,18 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.rene.pomodorotrello.R;
 import com.rene.pomodorotrello.adapters.TaskAdapter;
+import com.rene.pomodorotrello.controllers.SessionController;
 import com.rene.pomodorotrello.controllers.TaskController;
 import com.rene.pomodorotrello.interfaces.ItemRetriever;
+import com.rene.pomodorotrello.util.Constants;
 import com.rene.pomodorotrello.vo.CardList;
 
 import java.util.List;
@@ -21,16 +25,16 @@ import java.util.List;
 public class TasksFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+    public static final String LIST_ID = "listId";
 
-    //To do list
-    private RecyclerView toDoListRecyclerView;
-    private RecyclerView.Adapter toDoListAdapter;
-    private RecyclerView.LayoutManager toDoListLayoutManager;
+    private int listId = Constants.TO_DO_ID;
 
-    //Doing list
-    private RecyclerView doingListRecyclerView;
-    private RecyclerView.Adapter doingListAdapter;
-    private RecyclerView.LayoutManager doingListLayoutManager;
+    private RecyclerView listRecyclerView;
+    private RecyclerView.Adapter listAdapter;
+    private RecyclerView.LayoutManager listLayoutManager;
+
+    public TasksFragment() {
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -46,6 +50,10 @@ public class TasksFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            listId = getArguments().getInt(LIST_ID);
+        }
     }
 
     @Override
@@ -53,26 +61,43 @@ public class TasksFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tasks, container, false);
 
-        initToDoRecyclerView(view);
+        initRecyclerView(view);
+
+        SessionController sessionController = new SessionController();
+        if (!sessionController.isConnected(getActivity().getApplicationContext())) {
+            TextView warningTextView = (TextView) view.findViewById(R.id.warning_text_view);
+            warningTextView.setText(getActivity().getResources().getString(R.string.connect_warning_to_see_tasks));
+            warningTextView.setVisibility(View.VISIBLE);
+            warningTextView.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+
+            listRecyclerView.setVisibility(View.GONE);
+        }
 
         return view;
     }
-    private void initToDoRecyclerView(View view) {
-        toDoListRecyclerView = (RecyclerView) view.findViewById(R.id.todo_recycler_view);
-        toDoListRecyclerView.setHasFixedSize(true);
-        toDoListLayoutManager = new LinearLayoutManager(getActivity());
-        toDoListRecyclerView.setLayoutManager(toDoListLayoutManager);
+
+    private void initRecyclerView(View view) {
+        listRecyclerView = (RecyclerView) view.findViewById(R.id.todo_recycler_view);
+        listRecyclerView.setHasFixedSize(true);
+        listLayoutManager = new LinearLayoutManager(getActivity());
+        listRecyclerView.setLayoutManager(listLayoutManager);
 
         TaskController taskController = new TaskController();
-        taskController.getToDoCards(getActivity().getApplicationContext(), new ItemRetriever() {
+        getCards(taskController);
+    }
+
+    private void getCards(TaskController taskController) {
+
+        taskController.getCardsFromList(getActivity().getApplicationContext(), new ItemRetriever() {
             @Override
             public void retrieveItems(Object items) {
-                List<CardList> toDoCardList = (List<CardList>) items;
+                List<CardList> cardList = (List<CardList>) items;
 
-                toDoListAdapter = new TaskAdapter(toDoCardList);
-                toDoListRecyclerView.setAdapter(toDoListAdapter);
+                listAdapter = new TaskAdapter(cardList, listId);
+                listRecyclerView.setAdapter(listAdapter);
             }
-        });
+        }, listId);
+
     }
 
     public void onButtonPressed(Uri uri) {

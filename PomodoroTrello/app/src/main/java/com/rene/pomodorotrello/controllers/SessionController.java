@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.rene.pomodorotrello.dao.SharedPreferencesHelper;
+import com.rene.pomodorotrello.interfaces.ConnectionCallback;
+import com.rene.pomodorotrello.util.Constants;
 
 import io.oauth.OAuth;
 import io.oauth.OAuthCallback;
@@ -15,11 +17,11 @@ import io.oauth.OAuthData;
 
 public class SessionController {
 
-    public void login (final Context context) {
+    public void login (final Context context, final ConnectionCallback connectionCallback) {
 
         OAuth oAuth = new OAuth(context);
 
-        oAuth.initialize("_EKkCwzCd2_vigduk5_BG6mwq5w");
+        oAuth.initialize(Constants.PUBLIC_KEY);
 
         oAuth.popup("trello", new OAuthCallback() {
             @Override
@@ -28,9 +30,13 @@ public class SessionController {
 
                     SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(context);
                     sharedPreferencesHelper.saveValue(SharedPreferencesHelper.TOKEN_KEY, data.token);
-                    Log.d("APP","Expires in: " + data.expires_in);
+                    Log.d(Constants.LOG_KEY,"Expires in: " + data.expires_in);
+
+                    if(connectionCallback != null) {
+                        connectionCallback.connectionSuccessful();
+                    }
                 } else {
-                    Log.e("APP","Error on login");
+                    Log.e(Constants.LOG_KEY,"Error on login");
                 }
             }
         });

@@ -8,6 +8,10 @@
 
     <string name="action_settings">Settings</string>
 
+    <!--Config messages -->
+    <string name="connect_warning">Connect to Trello</string>
+    <string name="connect_warning_to_see_tasks">Connect to Trello to see your tasks</string>
+
     <string name="select_board">Select Board</string>
     <string name="select_todo_list">Select TO-DO List</string>
     <string name="select_doing_list">Select Doing List</string>
@@ -15,15 +19,21 @@
 
     <string name="menu_tasks">Tasks</string>
     <string name="menu_pomodoro">Pomodoro</string>
-    <string name="menu_settings">Settings</string>
+    <string name="menu_settings">Configuration</string>
 
-    <string name="save_config_button">Save</string>
+    <string name="save_config_button">Save Configuration</string>
+    <string name="connect_config_button">Connect</string>
 
-    //Alert dialog
+    <!--Alert dialog-->
     <string name="success_value">Success</string>
     <string name="values_saved">Values saved</string>
     <string name="Ok">Ok</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--Task tab titles-->
+    <string name="tab_tasks_title_todo">To-Do</string>
+    <string name="tab_tasks_title_doing">Doing</string>
+    <string name="tab_tasks_title_done">Done</string>
+
+    <string name="start_task">Start task</string>
+
 </resources>
