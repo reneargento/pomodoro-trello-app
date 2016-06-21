@@ -22,7 +22,6 @@ import com.rene.pomodorotrello.interfaces.ConnectionCallback;
 import com.rene.pomodorotrello.interfaces.ItemRetriever;
 import com.rene.pomodorotrello.vo.Board;
 import com.rene.pomodorotrello.vo.BoardList;
-import com.rene.pomodorotrello.vo.TrelloObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +33,7 @@ import static com.rene.pomodorotrello.R.id.done_spinner;
 import static com.rene.pomodorotrello.R.id.save_config_button;
 import static com.rene.pomodorotrello.R.id.todo_spinner;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ConfigFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- */
+
 @SuppressWarnings("unchecked")
 public class ConfigFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
@@ -274,18 +268,8 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
                 .show();
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
@@ -295,12 +279,5 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
         }
 
         loadSpinners();
-//
-//        List<String> selectBoardLabel = new ArrayList<>(1);
-//        selectBoardLabel.add(getActivity().getResources().getString(R.string.select_board));
-//
-//        initSpinnerAdapter(toDoListSpinner, toDoListSpinnerAdapter, selectBoardLabel);
-//        initSpinnerAdapter(doingListSpinner, doingListSpinnerAdapter, selectBoardLabel);
-//        initSpinnerAdapter(doneListSpinner, doneListSpinnerAdapter, selectBoardLabel);
     }
 }

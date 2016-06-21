@@ -44,7 +44,7 @@
     <string name="start_time">Start</string>
     <string name="pause_time">Pause</string>
     <string name="stop_time">Stop</string>
-    <string name="zero_time">00:00</string>
+    <string name="zero_time_hours">00:00:00</string>
     <string name="zero_count">0</string>
 
 </resources>

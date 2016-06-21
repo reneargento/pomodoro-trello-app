@@ -163,8 +163,10 @@ public class TasksActivity extends AppCompatActivity
 
         View getTabView(int position) {
             View tab = LayoutInflater.from(TasksActivity.this).inflate(R.layout.tab_tasks_layout, null);
-            TextView tv = (TextView) tab.findViewById(R.id.title_text);
-            tv.setText(tabTitles[position]);
+            TextView titleTextView = (TextView) tab.findViewById(R.id.title_text);
+            if (titleTextView != null) {
+                titleTextView.setText(tabTitles[position]);
+            }
             return tab;
         }
 
