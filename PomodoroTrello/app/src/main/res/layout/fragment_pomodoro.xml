@@ -5,17 +5,26 @@
     tools:context="com.rene.pomodorotrello.fragments.PomodoroFragment">
 
     <TextView
-        android:id="@+id/doing_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
-        android:gravity="center_horizontal"
-        android:text="@string/select_task" />
+        android:id="@+id/select_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="81dp"
+        android:text="@string/select_task"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
 
     <Spinner
         android:id="@+id/doing_spinner"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/doing_text_view" />
+        android:layout_below="@+id/select_text_view"
+        android:layout_centerHorizontal="true" />
+
+    <include layout="@layout/detailed_card"
+        android:id="@+id/detailed_card_layout"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/doing_spinner"
+        />
 
 </RelativeLayout>

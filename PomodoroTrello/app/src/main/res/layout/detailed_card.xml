@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/center_top_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        tools:text="Running Time"
+        android:text="@string/running_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/center_top_text_view"
+        android:layout_toLeftOf="@+id/center_top_text_view"
+        android:layout_toStartOf="@+id/center_top_text_view"
+        android:layout_marginRight="58dp"
+        android:layout_marginEnd="58dp"
+        android:layout_marginTop="32dp"
+        android:id="@+id/running_time_text_view" />
+
+    <TextView
+        android:text="@string/zero_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_below="@+id/running_time_text_view"
+        android:layout_alignRight="@+id/running_time_text_view"
+        android:layout_alignEnd="@+id/running_time_text_view"
+        android:layout_marginTop="11dp"
+        android:id="@+id/running_time_value_text_view" />
+
+    <TextView
+        tools:text="Total Time"
+        android:text="@string/total_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/running_time_text_view"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/total_time_text_view" />
+
+    <TextView
+        android:text="@string/zero_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/running_time_value_text_view"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/total_time_value_text_view" />
+
+    <TextView
+        tools:text="Pomodoros"
+        android:text="@string/pomodoros"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/total_time_text_view"
+        android:layout_toRightOf="@+id/total_time_text_view"
+        android:layout_toEndOf="@+id/total_time_text_view"
+        android:layout_marginLeft="48dp"
+        android:layout_marginStart="48dp"
+        android:id="@+id/pomodoros_spent_text_view" />
+
+    <TextView
+        android:text="@string/zero_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_alignTop="@+id/total_time_value_text_view"
+        android:layout_alignRight="@+id/pomodoros_spent_text_view"
+        android:layout_alignEnd="@+id/pomodoros_spent_text_view"
+        android:id="@+id/pomodoros_spent_value_text_view" />
+
+    <TextView
+        android:text="@string/zero_time"
+        android:textSize="30sp"
+        android:textColor="@color/colorPrimary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/total_time_value_text_view"
+        android:layout_alignLeft="@+id/total_time_value_text_view"
+        android:layout_alignStart="@+id/total_time_value_text_view"
+        android:layout_marginTop="47dp"
+        android:id="@+id/timer" />
+
+    <Button
+        tools:text="Start/Pause"
+        android:text="@string/start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="63dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
+        android:id="@+id/start_pause_button"
+        android:layout_below="@+id/timer"
+        android:layout_alignLeft="@+id/running_time_text_view"
+        android:layout_alignStart="@+id/running_time_text_view" />
+
+    <Button
+        tools:text="Stop"
+        android:text="@string/stop_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/stop_button"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_alignBaseline="@+id/start_pause_button"
+        android:layout_alignBottom="@+id/start_pause_button"
+        android:layout_toRightOf="@+id/total_time_text_view"
+        android:layout_toEndOf="@+id/total_time_text_view" />
+
+</RelativeLayout>

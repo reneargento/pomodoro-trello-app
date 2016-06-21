@@ -119,7 +119,13 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
                     List<String> boardNames = boardController.getNamesFromList(boardList);
                     initSpinnerAdapter(boardSpinner, boardSpinnerAdapter, boardNames);
 
-                    loadListValues();
+
+                    String defaultBoardId = null;
+                    if (boardList.get(0) != null) {
+                        defaultBoardId = boardList.get(0).id;
+                    }
+
+                    loadListValues(defaultBoardId);
                 }
             });
 
@@ -191,20 +197,21 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
             String boardId = BoardController.boardCache.get(parent.getItemAtPosition(pos));
             loadListItems(boardId);
         }
-
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
         //
     }
 
-    private void loadListValues() {
+    private void loadListValues(String defaultBoardId) {
         SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(getContext());
         String selectedBoard = sharedPreferencesHelper.getValue(SharedPreferencesHelper.SELECTED_BOARD_KEY);
 
         if (selectedBoard != null) {
             String boardId = BoardController.boardCache.get(selectedBoard);
             loadListItems(boardId);
+        } else if (defaultBoardId != null) {
+            loadListItems(defaultBoardId);
         }
     }
 
@@ -288,12 +295,12 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
         }
 
         loadSpinners();
-
-        List<String> selectBoardLabel = new ArrayList<>(1);
-        selectBoardLabel.add(getActivity().getResources().getString(R.string.select_board));
-
-        initSpinnerAdapter(toDoListSpinner, toDoListSpinnerAdapter, selectBoardLabel);
-        initSpinnerAdapter(doingListSpinner, doingListSpinnerAdapter, selectBoardLabel);
-        initSpinnerAdapter(doneListSpinner, doneListSpinnerAdapter, selectBoardLabel);
+//
+//        List<String> selectBoardLabel = new ArrayList<>(1);
+//        selectBoardLabel.add(getActivity().getResources().getString(R.string.select_board));
+//
+//        initSpinnerAdapter(toDoListSpinner, toDoListSpinnerAdapter, selectBoardLabel);
+//        initSpinnerAdapter(doingListSpinner, doingListSpinnerAdapter, selectBoardLabel);
+//        initSpinnerAdapter(doneListSpinner, doneListSpinnerAdapter, selectBoardLabel);
     }
 }

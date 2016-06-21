@@ -2,28 +2,26 @@ package com.rene.pomodorotrello.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.rene.pomodorotrello.R;
-import com.rene.pomodorotrello.controllers.BoardController;
-import com.rene.pomodorotrello.controllers.BoardListController;
 import com.rene.pomodorotrello.controllers.SessionController;
 import com.rene.pomodorotrello.controllers.TaskController;
-import com.rene.pomodorotrello.dao.ObjectStreamHelper;
 import com.rene.pomodorotrello.dao.SharedPreferencesHelper;
 import com.rene.pomodorotrello.interfaces.ItemRetriever;
 import com.rene.pomodorotrello.util.Constants;
-import com.rene.pomodorotrello.vo.BoardList;
 import com.rene.pomodorotrello.vo.CardList;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static com.rene.pomodorotrello.R.id.doing_spinner;
 
@@ -57,11 +55,30 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
     }
 
     private void initViews(View view) {
+        TextView selectTask = (TextView) view.findViewById(R.id.select_text_view);
+        selectTask.setGravity(Gravity.CENTER_HORIZONTAL);
+
         doingListSpinner = (Spinner) view.findViewById(R.id.doing_spinner);
         doingListSpinner.setOnItemSelectedListener(this);
 
         doingListSpinnerAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item);
         loadListItems();
+
+        initCardDetails(view);
+    }
+
+    private void initCardDetails(View view) {
+        View detailedCardLayout = view.findViewById(R.id.detailed_card_layout);
+
+        TextView runningTimeTextView = (TextView) view.findViewById(R.id.running_time_value_text_view);
+        TextView totalTimeTextView = (TextView) view.findViewById(R.id.total_time_value_text_view);
+        TextView pomodorosSpentTextView = (TextView) view.findViewById(R.id.pomodoros_spent_value_text_view);
+        TextView timerTextView = (TextView) view.findViewById(R.id.timer);
+
+        Button start_pause_button = (Button) view.findViewById(R.id.start_pause_button);
+        Button stop_button = (Button) view.findViewById(R.id.stop_button);
+
+
     }
 
     private void loadListItems() {
