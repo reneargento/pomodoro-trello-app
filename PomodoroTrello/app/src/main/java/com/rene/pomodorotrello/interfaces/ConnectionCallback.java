@@ -6,6 +6,7 @@ package com.rene.pomodorotrello.interfaces;
 
 public interface ConnectionCallback {
 
-    void connectionSuccessful();
+    void onLoginSuccess();
+    void onLoginError();
 
 }

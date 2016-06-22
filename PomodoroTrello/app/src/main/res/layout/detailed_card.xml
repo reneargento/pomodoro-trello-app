@@ -66,8 +66,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/stop_button"
-        android:layout_marginLeft="18dp"
-        android:layout_marginStart="18dp"
         android:layout_alignBaseline="@+id/start_pause_button"
         android:layout_alignBottom="@+id/start_pause_button"
         android:layout_toRightOf="@+id/timer"
@@ -83,5 +81,53 @@
         android:layout_below="@+id/timer"
         android:layout_toLeftOf="@+id/timer"
         android:layout_toStartOf="@+id/timer"/>
+
+    <Button
+        tools:text="Back"
+        android:text="@string/back_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:id="@+id/back_button"
+        android:layout_below="@+id/start_pause_button"
+        android:layout_toLeftOf="@+id/timer"
+        android:layout_toStartOf="@+id/timer"
+        android:visibility="invisible"/>
+
+    <Button
+        tools:text="Short break"
+        android:text="@string/short_break_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/short_break_button"
+        android:layout_below="@+id/back_button"
+        android:layout_toRightOf="@+id/start_pause_button"
+        android:layout_toEndOf="@+id/start_pause_button"
+        android:visibility="invisible"/>
+
+    <Button
+        tools:text="Long break"
+        android:text="@string/long_break_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/long_break_button"
+        android:layout_below="@+id/short_break_button"
+        android:layout_toRightOf="@+id/start_pause_button"
+        android:layout_toEndOf="@+id/start_pause_button"
+        android:layout_alignRight="@id/short_break_button"
+        android:layout_alignEnd="@id/short_break_button"
+        android:visibility="invisible"/>
+
+    <Button
+        tools:text="Done"
+        android:text="@string/done_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="62dp"
+        android:id="@+id/done_button"
+        android:layout_alignBaseline="@+id/back_button"
+        android:layout_toRightOf="@+id/short_break_button"
+        android:layout_toEndOf="@+id/short_break_button"
+        android:visibility="invisible"/>
 
 </RelativeLayout>

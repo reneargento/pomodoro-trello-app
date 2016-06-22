@@ -44,6 +44,10 @@
     <string name="start_time">Start</string>
     <string name="pause_time">Pause</string>
     <string name="stop_time">Stop</string>
+    <string name="back_task">Back</string>
+    <string name="done_task">Done</string>
+    <string name="short_break_task">Short Break</string>
+    <string name="long_break_task">Long Break</string>
     <string name="zero_time_hours">00:00:00</string>
     <string name="zero_count">0</string>
 

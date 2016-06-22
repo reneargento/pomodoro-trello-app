@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.rene.pomodorotrello.controllers.SessionController;
 import com.rene.pomodorotrello.dao.SharedPreferencesHelper;
 import com.rene.pomodorotrello.interfaces.ConnectionCallback;
 import com.rene.pomodorotrello.interfaces.ItemRetriever;
+import com.rene.pomodorotrello.util.Constants;
 import com.rene.pomodorotrello.vo.Board;
 import com.rene.pomodorotrello.vo.BoardList;
 
@@ -60,8 +62,12 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
         if (!sessionController.isConnected(getActivity().getApplicationContext())){
             sessionController.login(getActivity(), new ConnectionCallback() {
                 @Override
-                public void connectionSuccessful() {
+                public void onLoginSuccess() {
                     connectionSuccessfulHandling();
+                }
+                @Override
+                public void onLoginError() {
+                    Log.e(Constants.LOG_KEY, "Error on login");
                 }
             });
         }
@@ -166,8 +172,12 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
                 public void onClick(View view) {
                     sessionController.login(getContext(), new ConnectionCallback() {
                         @Override
-                        public void connectionSuccessful() {
+                        public void onLoginSuccess() {
                             connectionSuccessfulHandling();
+                        }
+                        @Override
+                        public void onLoginError() {
+                            Log.e(Constants.LOG_KEY, "Error on login");
                         }
                     });
                 }

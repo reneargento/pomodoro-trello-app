@@ -33,10 +33,10 @@ public class SessionController {
                     Log.d(Constants.LOG_KEY,"Expires in: " + data.expires_in);
 
                     if(connectionCallback != null) {
-                        connectionCallback.connectionSuccessful();
+                        connectionCallback.onLoginSuccess();
                     }
                 } else {
-                    Log.e(Constants.LOG_KEY,"Error on login");
+                    connectionCallback.onLoginError();
                 }
             }
         });

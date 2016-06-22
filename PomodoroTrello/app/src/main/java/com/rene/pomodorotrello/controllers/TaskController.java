@@ -108,4 +108,29 @@ public class TaskController extends TrelloObjectController {
         }
     }
 
+    //Requires WRITE permission -> makes an API call to move a task from one board to another
+    // PUT /1/cards/[card id]/idList
+    public void moveTask(int fromBoard, int toBoard) {
+
+    }
+
+    //Requires WRITE permission -> makes an API call to add a comment to a task
+    //POST /1/cards/[card id or shortlink]/actions/comments
+    public void addCommentToTask(String cardId, String comment) {
+
+    }
+
+    public String generateCommentForFinishedTask(int pomodoros, String totalTimeSpentString) {
+        int firstColonIndex = totalTimeSpentString.indexOf(":");
+        int startIndex = 0;
+        if (totalTimeSpentString.charAt(0) == '0') {
+            startIndex = 1;
+        }
+
+        String formattedHour = totalTimeSpentString.substring(startIndex,firstColonIndex)
+                + "h" + totalTimeSpentString.substring(firstColonIndex);
+
+        return pomodoros + " pomodoros, " + formattedHour + " total spent";
+    }
+
 }

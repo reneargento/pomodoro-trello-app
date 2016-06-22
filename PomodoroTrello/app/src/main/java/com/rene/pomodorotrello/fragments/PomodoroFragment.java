@@ -39,9 +39,16 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
     private CountDownTimer countDownTimer;
     private Button startPauseButton;
 
+    private Button backButton;
+    private Button doneButton;
+    private Button shortBreakButton;
+    private Button longBreakButton;
+
     //Used to avoid calling spinner's onItemSelected in initialization
     public boolean userIsInteracting;
     private boolean isTimerStarted = false;
+    private boolean isPomodoroCompleted = false;
+    private boolean isOnBreak = false;
 
     private long totalTime = Constants.POMODORO_DEFAULT_TIME;
 
@@ -96,11 +103,44 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addTimeSpent(false);
-                resetTimer();
+                if(!isOnBreak) {
+                    addTimeSpent(false);
+                    resetTimer();
+                }
             }
         });
 
+        backButton = (Button) view.findViewById(R.id.back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                moveDoingTaskTo(Constants.TO_DO_ID);
+            }
+        });
+
+        doneButton = (Button) view.findViewById(R.id.done_button);
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                moveDoingTaskTo(Constants.DONE_ID);
+            }
+        });
+
+        shortBreakButton = (Button) view.findViewById(R.id.short_break_button);
+        shortBreakButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startBreak(Constants.SHORT_BREAK_DEFAULT_TIME);
+            }
+        });
+
+        longBreakButton = (Button) view.findViewById(R.id.long_break_button);
+        longBreakButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startBreak(Constants.LONG_BREAK_DEFAULT_TIME);
+            }
+        });
     }
 
     private void startTimer() {
@@ -116,7 +156,11 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
 
             @Override
             public void onFinish() {
-                pomodoroPerformed();
+                if (!isOnBreak) {
+                    pomodoroPerformed();
+                } else {
+                    resetTimer();
+                }
             }
         }.start();
     }
@@ -181,6 +225,15 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
     }
 
     private void handleTime() {
+        if(isPomodoroCompleted) {
+            isPomodoroCompleted = false;
+            changeTaskCompletedButtonsVisibility(false);
+            countDownTimer.cancel();
+            totalTime = Constants.POMODORO_DEFAULT_TIME;
+        }
+
+        isOnBreak = false;
+
         //Start timer
         if(!isTimerStarted) {
             isTimerStarted = true;
@@ -202,7 +255,7 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
 
         PomodoroController pomodoroController = new PomodoroController();
         @SuppressWarnings("redundant") //using currentTaskTotalTime for code readability
-        long currentTaskTotalTime = pomodoroController.getMillisecondsFromFormattedTime(currentTaskTotalTimeString);
+                long currentTaskTotalTime = pomodoroController.getMillisecondsFromFormattedTime(currentTaskTotalTimeString);
 
         long newTotalTime = currentTaskTotalTime;
         if(pomodoroPerformed) {
@@ -246,6 +299,52 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         //Play sound
         PomodoroController pomodoroController = new PomodoroController();
         pomodoroController.playSound(getContext());
+
+        isPomodoroCompleted = true;
+        changeTaskCompletedButtonsVisibility(true);
+    }
+
+    private void changeTaskCompletedButtonsVisibility(boolean visible) {
+        int visibility = visible ? View.VISIBLE : View.INVISIBLE;
+
+        backButton.setVisibility(visibility);
+        doneButton.setVisibility(visibility);
+        shortBreakButton.setVisibility(visibility);
+        longBreakButton.setVisibility(visibility);
+    }
+
+    private void moveDoingTaskTo(int listId) {
+        TaskController taskController = new TaskController();
+        taskController.moveTask(Constants.DOING_ID, listId);
+
+        if (listId == Constants.DONE_ID) {
+            int pomodoroCounter = Integer.parseInt(pomodorosSpentTextView.getText().toString());
+            String totalTimeSpentString = totalTimeTextView.getText().toString();
+
+            //TODO
+            String cardId = "123"; //getCardIdFromName(doingListSpinner.getSelectedItem().toString());
+            String comment = taskController.generateCommentForFinishedTask(pomodoroCounter, totalTimeSpentString);
+            taskController.addCommentToTask(cardId, comment);
+        }
+
+        doingListSpinnerAdapter.remove(doingListSpinner.getSelectedItem());
+        doingListSpinnerAdapter.notifyDataSetChanged();
+
+        if(doingListSpinnerAdapter.getCount() == 0) {
+            changeTaskCompletedButtonsVisibility(false);
+        } else {
+            //TODO load totalTime and pomodoroCount from Realm
+
+        }
+
+    }
+
+    private void startBreak(long duration) {
+        countDownTimer.cancel();
+
+        isOnBreak = true;
+        totalTime = duration;
+        startTimer();
     }
 
 }
