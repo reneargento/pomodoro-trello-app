@@ -182,6 +182,8 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
 
                         List<String> doingListNames = taskController.getNamesFromList(doingList);
                         initSpinnerAdapter(doingListSpinner, doingListSpinnerAdapter, doingListNames);
+
+                        //TODO Realm
                     }
                 }, Constants.DOING_ID);
             } else{
