@@ -2,7 +2,7 @@ package com.rene.pomodorotrello.interfaces;
 
 import com.rene.pomodorotrello.vo.Board;
 import com.rene.pomodorotrello.vo.BoardList;
-import com.rene.pomodorotrello.vo.CardList;
+import com.rene.pomodorotrello.vo.Card;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public interface TrelloAPI {
                                         @Query("token") String token);
 
     @GET("lists/{listId}/cards")
-    Call<List<CardList>> getListCards(@Path("listId") String listId,
-                                      @Query("key") String key,
-                                      @Query("token") String token);
+    Call<List<Card>> getListCards(@Path("listId") String listId,
+                                  @Query("key") String key,
+                                  @Query("token") String token);
 }

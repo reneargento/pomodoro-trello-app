@@ -6,4 +6,7 @@ package com.rene.pomodorotrello.vo;
 
 public class Card extends TrelloObject {
 
+    public long totalMillisecondsSpent;
+    public int pomodoros;
+
 }

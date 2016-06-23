@@ -4,8 +4,11 @@ import android.content.Context;
 import android.media.MediaPlayer;
 
 import com.rene.pomodorotrello.R;
+import com.rene.pomodorotrello.interfaces.DatabaseFetchOperation;
 import com.rene.pomodorotrello.util.Constants;
+import com.rene.pomodorotrello.vo.Card;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.TimeUnit;
@@ -46,6 +49,17 @@ public class PomodoroController {
                 mediaPlayer.start();
             }
         }).start();
+    }
+
+    public void getOrCreateAllCardsFetched(List<Card> cards, DatabaseFetchOperation databaseFetchOperation) {
+
+        if (cards.size() > 0) {
+            CardDatabaseController cardDatabaseController = new CardDatabaseController();
+
+            for (Card card : cards) {
+                cardDatabaseController.getOrCreateCard(card, databaseFetchOperation);
+            }
+        }
     }
 
 }

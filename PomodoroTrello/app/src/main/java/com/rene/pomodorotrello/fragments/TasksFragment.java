@@ -18,7 +18,7 @@ import com.rene.pomodorotrello.controllers.SessionController;
 import com.rene.pomodorotrello.controllers.TaskController;
 import com.rene.pomodorotrello.interfaces.ItemRetriever;
 import com.rene.pomodorotrello.util.Constants;
-import com.rene.pomodorotrello.vo.CardList;
+import com.rene.pomodorotrello.vo.Card;
 
 import java.util.List;
 
@@ -91,7 +91,7 @@ public class TasksFragment extends Fragment {
         taskController.getCardsFromList(getActivity().getApplicationContext(), new ItemRetriever() {
             @Override
             public void retrieveItems(Object items) {
-                List<CardList> cardList = (List<CardList>) items;
+                List<Card> cardList = (List<Card>) items;
 
                 listAdapter = new TaskAdapter(cardList, listId);
                 listRecyclerView.setAdapter(listAdapter);

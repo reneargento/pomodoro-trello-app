@@ -22,8 +22,8 @@ import io.realm.RealmObject;
 @SuppressWarnings("unchecked")
 public class CardDatabaseController {
 
-    public void getOrCreateCardByName(final String name, @Nullable final DatabaseFetchOperation databaseFetchOperation) {
-        getCardByName(name, new DatabaseFetchOperation() {
+    public void getOrCreateCard(@NonNull final Card card, @Nullable final DatabaseFetchOperation databaseFetchOperation) {
+        getCardById(card.id, new DatabaseFetchOperation() {
             @Override
             public void onOperationSuccess(List<? extends RealmObject> objectList) {
                 if (objectList.size() > 0) {
@@ -32,8 +32,6 @@ public class CardDatabaseController {
                     }
                 } else {
                     //Card does not exist, let's create it
-                    Card card = new Card();
-                    card.name = name;
                     saveCard(card, false);
                 }
             }
@@ -45,27 +43,47 @@ public class CardDatabaseController {
         });
     }
 
-    private void getAllCards(@NonNull DatabaseFetchOperation databaseFetchOperation){
+    private void getCardById(String id, DatabaseFetchOperation databaseFetchOperation) {
         CardDatabaseManager cardDatabaseManager = new CardDatabaseManager();
-        cardDatabaseManager.getAllCards(databaseFetchOperation);
+        cardDatabaseManager.getCardById(id, databaseFetchOperation);
     }
 
-    private void getCardByName(String name, DatabaseFetchOperation databaseFetchOperation) {
+    public void getCardByName(String name, DatabaseFetchOperation databaseFetchOperation) {
         CardDatabaseManager cardDatabaseManager = new CardDatabaseManager();
         cardDatabaseManager.getCardByName(name, databaseFetchOperation);
     }
 
-    public void saveCard(Card card, final boolean updateIfExists) {
+    public void updateCard(final Card card) {
+        if(card != null && card.name != null && card.id == null) {
+            getCardByName(card.name, new DatabaseFetchOperation() {
+                @Override
+                public void onOperationSuccess(List<? extends RealmObject> objectList) {
+                    List<CardPomodoro> cardList = (List<CardPomodoro>) objectList;
+                    if (cardList.size() > 0) {
+                        card.id = cardList.get(0).id;
+                        saveCard(card, true);
+                    }
+                }
+
+                @Override
+                public void onOperationError() {
+                    Log.e(Constants.LOG_KEY, "An exception occurred while updating a card");
+                }
+            });
+        }
+    }
+
+    private void saveCard(Card card, final boolean update) {
 
         final CardPomodoro cardPomodoro = new CardPomodoro();
+        cardPomodoro.id = card.id;
         cardPomodoro.name = card.name;
 
-        //This is a new card, so we start it with zero seconds and zero pomodoros
-        cardPomodoro.totalMillisecondsSpent = 0;
-        cardPomodoro.pomodoros = 0;
+        cardPomodoro.totalMillisecondsSpent = card.totalMillisecondsSpent;
+        cardPomodoro.pomodoros = card.pomodoros;
 
         CardDatabaseManager cardDatabaseManager = new CardDatabaseManager();
-        cardDatabaseManager.saveCard(cardPomodoro, updateIfExists);
+        cardDatabaseManager.saveCard(cardPomodoro, update);
     }
 
     public void deleteCard(String name) {

@@ -4,11 +4,9 @@ import android.util.Log;
 
 import com.rene.pomodorotrello.interfaces.DatabaseFetchOperation;
 import com.rene.pomodorotrello.util.Constants;
-import com.rene.pomodorotrello.vo.Card;
 import com.rene.pomodorotrello.vo.CardPomodoro;
 
 import io.realm.Realm;
-import io.realm.RealmObject;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
@@ -27,6 +25,16 @@ public class CardDatabaseManager {
         databaseFetchOperation.onOperationSuccess(cards);
     }
 
+    public void getCardById(String id, DatabaseFetchOperation databaseFetchOperation) {
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmResults<CardPomodoro> cards = realm.where(CardPomodoro.class)
+                .equalTo(CardPomodoro.ID_KEY, id)
+                .findAll();
+
+        databaseFetchOperation.onOperationSuccess(cards);
+    }
+
     public void getCardByName(String name, DatabaseFetchOperation databaseFetchOperation) {
         Realm realm = Realm.getDefaultInstance();
 
@@ -37,13 +45,13 @@ public class CardDatabaseManager {
         databaseFetchOperation.onOperationSuccess(cards);
     }
 
-    public void saveCard(final CardPomodoro cardPomodoro, final boolean updateIfExists) {
+    public void saveCard(final CardPomodoro cardPomodoro, final boolean update) {
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                if (updateIfExists) {
+                if (update) {
                     realm.copyToRealmOrUpdate(cardPomodoro);
                 } else {
                     //Throws exception if object already exists

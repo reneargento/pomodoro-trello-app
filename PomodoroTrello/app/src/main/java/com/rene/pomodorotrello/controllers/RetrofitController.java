@@ -7,7 +7,7 @@ import com.google.gson.JsonSerializer;
 import com.rene.pomodorotrello.util.Constants;
 import com.rene.pomodorotrello.vo.Board;
 import com.rene.pomodorotrello.vo.BoardList;
-import com.rene.pomodorotrello.vo.CardList;
+import com.rene.pomodorotrello.vo.Card;
 import com.rene.pomodorotrello.vo.TrelloObject;
 
 import java.lang.reflect.Type;
@@ -39,8 +39,8 @@ public class RetrofitController {
                                         return context.serialize(sourceObject, Board.class);
                                     } else if (sourceObject instanceof BoardList) {
                                         return context.serialize(sourceObject, BoardList.class);
-                                    } else if (sourceObject instanceof CardList) {
-                                        return context.serialize(sourceObject, CardList.class);
+                                    } else if (sourceObject instanceof Card) {
+                                        return context.serialize(sourceObject, Card.class);
                                     }
                                     return context.serialize(sourceObject);
                                 }

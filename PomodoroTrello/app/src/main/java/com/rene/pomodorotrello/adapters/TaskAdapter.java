@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.rene.pomodorotrello.R;
 import com.rene.pomodorotrello.util.Constants;
-import com.rene.pomodorotrello.vo.CardList;
+import com.rene.pomodorotrello.vo.Card;
 
 import org.w3c.dom.Text;
 
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
-    private List<CardList> cardList;
+    private List<Card> card;
     private int listId;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -38,8 +38,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         }
     }
 
-    public TaskAdapter(List<CardList> cardList, int listId) {
-        this.cardList = cardList;
+    public TaskAdapter(List<Card> cardList, int listId) {
+        this.card = cardList;
         this.listId = listId;
     }
 
@@ -53,7 +53,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.nameTextView.setText(cardList.get(position).name);
+        holder.nameTextView.setText(card.get(position).name);
         holder.nameTextView.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
 
         if (listId != Constants.TO_DO_ID) {
@@ -74,6 +74,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return cardList.size();
+        return card.size();
     }
 }

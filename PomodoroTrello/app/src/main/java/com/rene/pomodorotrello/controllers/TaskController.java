@@ -7,7 +7,7 @@ import com.rene.pomodorotrello.dao.SharedPreferencesHelper;
 import com.rene.pomodorotrello.interfaces.ItemRetriever;
 import com.rene.pomodorotrello.interfaces.TrelloAPI;
 import com.rene.pomodorotrello.util.Constants;
-import com.rene.pomodorotrello.vo.CardList;
+import com.rene.pomodorotrello.vo.Card;
 
 import java.util.List;
 import java.util.Map;
@@ -87,18 +87,18 @@ public class TaskController extends TrelloObjectController {
                 if (token != null) {
                     TrelloAPI trelloAPI = retrofit.create(TrelloAPI.class);
 
-                    Call<List<CardList>> cardListCall = trelloAPI.getListCards(listId, Constants.KEY, token);
+                    Call<List<Card>> cardListCall = trelloAPI.getListCards(listId, Constants.KEY, token);
 
-                    cardListCall.enqueue(new Callback<List<CardList>>() {
+                    cardListCall.enqueue(new Callback<List<Card>>() {
                         @Override
-                        public void onResponse(Call<List<CardList>> call, Response<List<CardList>> response) {
-                            List<CardList> cardList = response.body();
+                        public void onResponse(Call<List<Card>> call, Response<List<Card>> response) {
+                            List<Card> cardList = response.body();
 
                             itemRetriever.retrieveItems(cardList);
                         }
 
                         @Override
-                        public void onFailure(Call<List<CardList>> call, Throwable t) {
+                        public void onFailure(Call<List<Card>> call, Throwable t) {
                             t.printStackTrace();
                         }
                     });
