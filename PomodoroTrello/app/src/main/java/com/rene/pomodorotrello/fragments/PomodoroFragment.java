@@ -385,7 +385,7 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
 
     private void moveDoingTaskTo(int listId, String cardId) {
         final TaskController taskController = new TaskController();
-        taskController.moveTask(Constants.DOING_ID, listId);
+        taskController.moveTask(cardId, Constants.DOING_ID, listId);
 
         if (listId == Constants.DONE_ID) {
             final int pomodoroCounter = Integer.parseInt(pomodorosSpentTextView.getText().toString());

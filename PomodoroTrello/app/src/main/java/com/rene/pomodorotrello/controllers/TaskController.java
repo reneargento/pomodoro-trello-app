@@ -110,12 +110,16 @@ public class TaskController extends TrelloObjectController {
 
     //Requires WRITE permission -> makes an API call to move a task from one board to another
     // PUT /1/cards/[card id]/idList
-    public void moveTask(int fromBoard, int toBoard) {
+    public void moveTask(String cardId, int fromBoard, int toBoard) {
+        //This is where an API call would be made to move the card to the DOING list
+        //And the adapter would be notified of the data change
+        //Unfortunately, I only found a way to get access to Trello with READ permission
+        //And this API call requires WRITE permission
 
     }
 
     //Requires WRITE permission -> makes an API call to add a comment to a task
-    //POST /1/cards/[card id or shortlink]/actions/comments
+    //POST /1/cards/[card id]/actions/comments
     public void addCommentToTask(String cardId, String comment) {
 
     }

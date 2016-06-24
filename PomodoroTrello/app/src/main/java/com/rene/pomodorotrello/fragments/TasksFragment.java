@@ -31,7 +31,6 @@ public class TasksFragment extends Fragment {
 
     private RecyclerView listRecyclerView;
     private RecyclerView.Adapter listAdapter;
-    private RecyclerView.LayoutManager listLayoutManager;
 
     public TasksFragment() {
     }
@@ -79,13 +78,15 @@ public class TasksFragment extends Fragment {
     private void initRecyclerView(View view) {
         listRecyclerView = (RecyclerView) view.findViewById(R.id.todo_recycler_view);
         listRecyclerView.setHasFixedSize(true);
-        listLayoutManager = new LinearLayoutManager(getActivity());
+
+        RecyclerView.LayoutManager listLayoutManager = new LinearLayoutManager(getActivity());
         listRecyclerView.setLayoutManager(listLayoutManager);
 
         TaskController taskController = new TaskController();
         getCards(taskController);
     }
 
+    @SuppressWarnings("unchecked")
     private void getCards(TaskController taskController) {
 
         taskController.getCardsFromList(getActivity().getApplicationContext(), new ItemRetriever() {

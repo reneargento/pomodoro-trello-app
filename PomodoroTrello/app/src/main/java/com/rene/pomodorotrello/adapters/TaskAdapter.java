@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.rene.pomodorotrello.R;
+import com.rene.pomodorotrello.controllers.TaskController;
 import com.rene.pomodorotrello.util.Constants;
 import com.rene.pomodorotrello.vo.Card;
 
@@ -52,7 +53,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.nameTextView.setText(card.get(position).name);
         holder.nameTextView.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
 
@@ -62,10 +63,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             holder.startButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //This is where an API call would be made to move the card to the DOING list
-                    //And the adapter would be notified of the data change
-                    //Unfortunately, I only found a way to get access to Trello with READ permission
-                    //And this API call requires WRITE permission
+                   TaskController taskController = new TaskController();
+                    taskController.moveTask(card.get(position).id, Constants.TO_DO_ID, Constants.DOING_ID);
+
+                    card.remove(position);
+                    notifyItemRemoved(position);
                 }
             });
         }
