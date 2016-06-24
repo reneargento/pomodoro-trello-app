@@ -42,13 +42,15 @@ public class PomodoroController {
 
     public void playSound(final Context context) {
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.tone);
-                mediaPlayer.start();
-            }
-        }).start();
+        if (context != null) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.tone);
+                    mediaPlayer.start();
+                }
+            }).start();
+        }
     }
 
     public void getOrCreateAllCardsFetched(List<Card> cards, DatabaseFetchOperation databaseFetchOperation) {

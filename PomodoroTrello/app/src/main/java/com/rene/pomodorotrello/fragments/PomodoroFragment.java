@@ -1,5 +1,6 @@
 package com.rene.pomodorotrello.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
@@ -15,7 +16,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.rene.pomodorotrello.R;
+import com.rene.pomodorotrello.application.PomodoroTrelloApplication;
 import com.rene.pomodorotrello.controllers.CardDatabaseController;
+import com.rene.pomodorotrello.controllers.NotificationController;
 import com.rene.pomodorotrello.controllers.PomodoroController;
 import com.rene.pomodorotrello.controllers.SessionController;
 import com.rene.pomodorotrello.controllers.TaskController;
@@ -59,6 +62,8 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
 
     private long totalTime = Constants.POMODORO_DEFAULT_TIME;
 
+    private Context appContext;
+
     public PomodoroFragment() {
         // Required empty public constructor
     }
@@ -66,6 +71,9 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        NotificationController notificationController = new NotificationController(getContext());
+        notificationController.cancelNotification();
     }
 
     @Override
@@ -75,6 +83,8 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         View view = inflater.inflate(R.layout.fragment_pomodoro, container, false);
 
         initViews(view);
+
+        appContext = getContext().getApplicationContext();
 
         return view;
     }
@@ -165,6 +175,12 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
 
             @Override
             public void onFinish() {
+                //Is the application running on the background?
+                if (!isAdded()) {
+                    NotificationController notificationController = new NotificationController(appContext);
+                    notificationController.generateNotification();
+                }
+
                 if (!isOnBreak) {
                     pomodoroPerformed();
                 } else {
@@ -327,7 +343,10 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         isTimerStarted = false;
 
         timerTextView.setText(R.string.zero_time_hours);
-        startPauseButton.setText(getString(R.string.start_time));
+
+        if (isAdded()) {
+            startPauseButton.setText(getString(R.string.start_time));
+        }
     }
 
     private void resetTotalTimeLabel() {

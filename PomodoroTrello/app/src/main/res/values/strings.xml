@@ -51,4 +51,8 @@
     <string name="zero_time_hours">00:00:00</string>
     <string name="zero_count">0</string>
 
+    <!-- Notification -->
+    <string name="notification_title">PomodoroTrello</string>
+    <string name="notification_text">Your pomodoro timer ran out!</string>
+
 </resources>
