@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.rene.pomodorotrello.dao.CardDatabaseManager;
 import com.rene.pomodorotrello.interfaces.DatabaseFetchOperation;
+import com.rene.pomodorotrello.interfaces.DeleteCardCallback;
 import com.rene.pomodorotrello.util.Constants;
 import com.rene.pomodorotrello.vo.Card;
 import com.rene.pomodorotrello.vo.CardPomodoro;
@@ -86,9 +87,9 @@ public class CardDatabaseController {
         cardDatabaseManager.saveCard(cardPomodoro, update);
     }
 
-    public void deleteCard(String name) {
+    public void deleteCard(String name, DeleteCardCallback deleteCardCallback) {
         CardDatabaseManager cardDatabaseManager = new CardDatabaseManager();
-        cardDatabaseManager.deleteCard(name);
+        cardDatabaseManager.deleteCard(name, deleteCardCallback);
     }
 
 }

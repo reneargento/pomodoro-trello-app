@@ -21,6 +21,7 @@ import com.rene.pomodorotrello.controllers.SessionController;
 import com.rene.pomodorotrello.controllers.TaskController;
 import com.rene.pomodorotrello.dao.SharedPreferencesHelper;
 import com.rene.pomodorotrello.interfaces.DatabaseFetchOperation;
+import com.rene.pomodorotrello.interfaces.DeleteCardCallback;
 import com.rene.pomodorotrello.interfaces.ItemRetriever;
 import com.rene.pomodorotrello.util.Constants;
 import com.rene.pomodorotrello.vo.Card;
@@ -120,7 +121,8 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                moveDoingTaskTo(Constants.TO_DO_ID);
+                DeleteCardCallback deleteCardCallback = generateDeleteCardCallback(Constants.TO_DO_ID);
+                deleteTaskFromDatabase(deleteCardCallback);
             }
         });
 
@@ -128,7 +130,8 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                moveDoingTaskTo(Constants.DONE_ID);
+                DeleteCardCallback deleteCardCallback = generateDeleteCardCallback(Constants.DONE_ID);
+                deleteTaskFromDatabase(deleteCardCallback);
             }
         });
 
@@ -189,7 +192,6 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
                         List<String> doingListNames = taskController.getNamesFromList(doingList);
                         initSpinnerAdapter(doingListSpinner, doingListSpinnerAdapter, doingListNames);
 
-                        //TODO Bug when updating pomodoros
                         PomodoroController getOrCreateAllCardsFetched = new PomodoroController();
                         //Used to get attributes totalMillisecondsSpent and pomodoros that are not in the server
                         getOrCreateAllCardsFetched.getOrCreateAllCardsFetched(doingList, new DatabaseFetchOperation() {
@@ -362,18 +364,16 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         longBreakButton.setVisibility(visibility);
     }
 
-    private void moveDoingTaskTo(int listId) {
-        TaskController taskController = new TaskController();
+    private void moveDoingTaskTo(int listId, String cardId) {
+        final TaskController taskController = new TaskController();
         taskController.moveTask(Constants.DOING_ID, listId);
 
         if (listId == Constants.DONE_ID) {
-            int pomodoroCounter = Integer.parseInt(pomodorosSpentTextView.getText().toString());
-            String totalTimeSpentString = totalTimeTextView.getText().toString();
+            final int pomodoroCounter = Integer.parseInt(pomodorosSpentTextView.getText().toString());
+            final String totalTimeSpentString = totalTimeTextView.getText().toString();
 
-            //TODO
-            String cardId = "123"; //getCardIdFromName(doingListSpinner.getSelectedItem().toString());
-            String comment = taskController.generateCommentForFinishedTask(pomodoroCounter, totalTimeSpentString);
-            taskController.addCommentToTask(cardId, comment);
+            String generateCommentForFinishedTask = taskController.generateCommentForFinishedTask(pomodoroCounter, totalTimeSpentString);
+            taskController.addCommentToTask(cardId, generateCommentForFinishedTask);
         }
 
         doingListSpinnerAdapter.remove(doingListSpinner.getSelectedItem());
@@ -381,11 +381,35 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
 
         if(doingListSpinnerAdapter.getCount() == 0) {
             changeTaskCompletedButtonsVisibility(false);
-        } else {
-            //TODO load totalTime and pomodoroCount from Realm
 
+            resetTotalTimeLabel();
+            resetPomodorosLabel();
         }
 
+    }
+
+    private void deleteTaskFromDatabase(DeleteCardCallback deleteCardCallback) {
+        if (doingListSpinner != null && doingListSpinner.getSelectedItem() != null) {
+            String name = (String) doingListSpinner.getSelectedItem();
+
+            CardDatabaseController cardDatabaseController = new CardDatabaseController();
+            cardDatabaseController.deleteCard(name, deleteCardCallback);
+        }
+    }
+
+    private DeleteCardCallback generateDeleteCardCallback(final int listId) {
+
+        return new DeleteCardCallback() {
+            @Override
+            public void onDeleteSuccessful(String cardId) {
+                moveDoingTaskTo(listId, cardId);
+
+                if (doingListSpinner != null) {
+                    String cardName = (String) doingListSpinner.getSelectedItem();
+                    updateTimeAndPomodoroLabels(cardName);
+                }
+            }
+        };
     }
 
     private void startBreak(long duration) {
@@ -406,6 +430,34 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         if (pomodorosSpentTextView != null) {
             pomodorosSpentTextView.setText(String.valueOf(cardPomodoro.pomodoros));
         }
+    }
+
+    private void updateTimeAndPomodoroLabels(String cardName) {
+
+        CardDatabaseController cardDatabaseController = new CardDatabaseController();
+        cardDatabaseController.getCardByName(cardName, new DatabaseFetchOperation() {
+            @Override
+            public void onOperationSuccess(List<? extends RealmObject> objectList) {
+                if (objectList.size() > 0) {
+                    List<CardPomodoro> cardPomodoroList = (List<CardPomodoro>) objectList;
+                    CardPomodoro cardPomodoro = cardPomodoroList.get(0);
+
+                    PomodoroController pomodoroController = new PomodoroController();
+                    if (totalTimeTextView != null) {
+                        totalTimeTextView.setText(pomodoroController.getFormattedTimeFromMilliseconds(cardPomodoro.totalMillisecondsSpent));
+                    }
+
+                    if (pomodorosSpentTextView != null) {
+                        pomodorosSpentTextView.setText(String.valueOf(cardPomodoro.pomodoros));
+                    }
+                }
+            }
+
+            @Override
+            public void onOperationError() {
+                Log.e(Constants.LOG_KEY, "An error occurred while updating views");
+            }
+        });
     }
 
     private void updateCardOnDatabase(long newTotalTime, boolean pomodoroPerformed) {
@@ -431,11 +483,9 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         });
 
         updatedCard.totalMillisecondsSpent = newTotalTime;
-        if (pomodoroPerformed && pomodorosSpentTextView != null) {
+        if (pomodorosSpentTextView != null) {
             updatedCard.pomodoros = Integer.parseInt(pomodorosSpentTextView.getText().toString());
         }
         cardDatabaseController.updateCard(updatedCard);
     }
-
-
 }

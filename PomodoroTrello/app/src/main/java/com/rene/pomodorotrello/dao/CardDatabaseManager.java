@@ -3,6 +3,7 @@ package com.rene.pomodorotrello.dao;
 import android.util.Log;
 
 import com.rene.pomodorotrello.interfaces.DatabaseFetchOperation;
+import com.rene.pomodorotrello.interfaces.DeleteCardCallback;
 import com.rene.pomodorotrello.util.Constants;
 import com.rene.pomodorotrello.vo.CardPomodoro;
 
@@ -67,19 +68,24 @@ public class CardDatabaseManager {
         });
     }
 
-    public void deleteCard(String name) {
+    public void deleteCard(String name, final DeleteCardCallback deleteCardCallback) {
         Realm realm = Realm.getDefaultInstance();
 
         final RealmResults<CardPomodoro> queryResult = realm.where(CardPomodoro.class)
                 .equalTo(CardPomodoro.NAME_KEY, name)
                 .findAll();
 
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                queryResult.deleteFirstFromRealm();
-            }
-        });
-    }
+        if (queryResult.size() > 0) {
+            CardPomodoro card = queryResult.get(0);
+            final String cardId = card.id;
 
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    queryResult.deleteFirstFromRealm();
+                    deleteCardCallback.onDeleteSuccessful(cardId);
+                }
+            });
+        }
+    }
 }
