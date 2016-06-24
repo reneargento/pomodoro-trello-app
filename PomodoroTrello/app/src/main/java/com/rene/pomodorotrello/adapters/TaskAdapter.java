@@ -53,7 +53,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.nameTextView.setText(card.get(position).name);
         holder.nameTextView.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
 
@@ -64,10 +64,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
                 @Override
                 public void onClick(View view) {
                    TaskController taskController = new TaskController();
-                    taskController.moveTask(card.get(position).id, Constants.TO_DO_ID, Constants.DOING_ID);
+                    taskController.moveTask(card.get(holder.getAdapterPosition()).id, Constants.TO_DO_ID, Constants.DOING_ID);
 
-                    card.remove(position);
-                    notifyItemRemoved(position);
+                    card.remove(holder.getAdapterPosition());
+                    notifyItemRemoved(holder.getAdapterPosition());
                 }
             });
         }
