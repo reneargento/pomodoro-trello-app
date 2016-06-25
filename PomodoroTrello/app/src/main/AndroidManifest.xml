@@ -13,12 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.ConfigActivity"
+            android:name=".ui.configuration.ConfigActivity"
             android:label="@string/title_activity_config"
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.SplashActivity"
+            android:name=".ui.activities.SplashActivity"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,12 +27,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.TasksActivity"
+            android:name=".ui.tasks.TasksActivity"
             android:label="@string/title_activity_tasks"
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".activities.PomodoroActivity"
+        <activity android:name=".ui.pomodoro.PomodoroActivity"
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>

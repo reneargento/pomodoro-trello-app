@@ -12,12 +12,20 @@ import io.realm.RealmConfiguration;
 
 public class PomodoroTrelloApplication extends Application {
 
+    private static PomodoroTrelloApplication context;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
         RealmConfiguration config = new RealmConfiguration.Builder(this).build();
         Realm.setDefaultConfiguration(config);
+
+        context = this;
+    }
+
+    public static Context getContext() {
+        return context;
     }
 
 }

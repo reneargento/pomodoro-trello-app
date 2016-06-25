@@ -10,6 +10,8 @@ public class Constants {
     public final static String PUBLIC_KEY = "_EKkCwzCd2_vigduk5_BG6mwq5w";
     public final static String KEY = "591b11d0ec3b5b8d7b37d42d37185957";
     public final static String LOG_KEY = "PomodoroTrello";
+    public final static String TRELLO_KEY = "trello";
+    public final static String ERROR_KEY = "error";
 
     public static final String POMODORO_FORMAT = "%02d:%02d:%02d";
     public final static long MILLISECOND = 1000;

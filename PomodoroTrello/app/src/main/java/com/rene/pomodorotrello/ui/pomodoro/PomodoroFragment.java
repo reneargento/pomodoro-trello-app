@@ -1,4 +1,4 @@
-package com.rene.pomodorotrello.fragments;
+package com.rene.pomodorotrello.ui.pomodoro;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,7 +16,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.rene.pomodorotrello.R;
-import com.rene.pomodorotrello.application.PomodoroTrelloApplication;
 import com.rene.pomodorotrello.controllers.CardDatabaseController;
 import com.rene.pomodorotrello.controllers.NotificationController;
 import com.rene.pomodorotrello.controllers.PomodoroController;
@@ -55,7 +54,7 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
     private Button longBreakButton;
 
     //Used to avoid calling spinner's onItemSelected in initialization
-    public boolean userIsInteracting;
+    boolean userIsInteracting;
     private boolean isTimerStarted = false;
     private boolean isPomodoroCompleted = false;
     private boolean isOnBreak = false;
@@ -192,7 +191,7 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
 
     private void loadListItems() {
         SessionController sessionController = new SessionController();
-        if (sessionController.isConnected(getContext())){
+        if (sessionController.isConnected()){
 
             SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(getContext());
             final String doingListName = sharedPreferencesHelper.getValue(SharedPreferencesHelper.SELECTED_DOING_LIST_KEY);
@@ -200,7 +199,7 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
             if (doingListName != null) {
                 //User is connected and has selected a list
                 final TaskController taskController = new TaskController();
-                taskController.getCardsFromList(getContext(), new ItemRetriever() {
+                taskController.getCardsFromList(new ItemRetriever() {
                     @Override
                     public void retrieveItems(Object items) {
                         final List<Card> doingList = (List<Card>) items;

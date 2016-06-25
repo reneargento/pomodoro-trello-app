@@ -1,28 +1,21 @@
 package com.rene.pomodorotrello.controllers;
 
-import android.content.Context;
-
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 import com.rene.pomodorotrello.dao.SharedPreferencesHelper;
 import com.rene.pomodorotrello.interfaces.ItemRetriever;
 import com.rene.pomodorotrello.interfaces.TrelloAPI;
 import com.rene.pomodorotrello.util.Constants;
 import com.rene.pomodorotrello.vo.Board;
-import com.rene.pomodorotrello.vo.TrelloObject;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.GsonConverterFactory;
+
 import retrofit2.Response;
 import retrofit2.Retrofit;
+
+import static com.rene.pomodorotrello.application.PomodoroTrelloApplication.getContext;
 
 /**
  * Created by rene on 6/16/16.
@@ -32,11 +25,11 @@ public class BoardController extends TrelloObjectController {
 
     public static HashMap<String, String> boardCache = new HashMap<>();
 
-    public void getBoards(Context context, final ItemRetriever itemRetriever) {
+    public void getBoards(final ItemRetriever itemRetriever) {
 
         Retrofit retrofit = RetrofitController.getInstance();
 
-        String token = SharedPreferencesHelper.getInstance(context).getValue(SharedPreferencesHelper.TOKEN_KEY);
+        String token = SharedPreferencesHelper.getInstance(getContext()).getValue(SharedPreferencesHelper.TOKEN_KEY);
 
         if (token != null) {
             TrelloAPI trelloAPI = retrofit.create(TrelloAPI.class);

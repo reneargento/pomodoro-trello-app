@@ -8,7 +8,7 @@ import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 
 import com.rene.pomodorotrello.R;
-import com.rene.pomodorotrello.activities.PomodoroActivity;
+import com.rene.pomodorotrello.ui.pomodoro.PomodoroActivity;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 

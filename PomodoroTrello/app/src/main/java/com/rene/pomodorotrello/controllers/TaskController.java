@@ -18,22 +18,24 @@ import retrofit2.GsonConverterFactory;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static com.rene.pomodorotrello.application.PomodoroTrelloApplication.getContext;
+
 /**
  * Created by rene on 6/19/16.
  */
 
 public class TaskController extends TrelloObjectController {
 
-    public void getCardsFromList(Context context, final ItemRetriever itemRetriever, int listId) {
+    public void getCardsFromList(final ItemRetriever itemRetriever, int listId) {
         switch (listId) {
             case Constants.TO_DO_ID:
-                getToDoCards(context, itemRetriever);
+                getToDoCards(getContext(), itemRetriever);
                 break;
             case Constants.DOING_ID:
-                getDoingCards(context, itemRetriever);
+                getDoingCards(getContext(), itemRetriever);
                 break;
             case Constants.DONE_ID:
-                getDoneCards(context, itemRetriever);
+                getDoneCards(getContext(), itemRetriever);
                 break;
         }
     }

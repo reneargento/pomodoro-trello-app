@@ -13,8 +13,6 @@ import com.rene.pomodorotrello.controllers.TaskController;
 import com.rene.pomodorotrello.util.Constants;
 import com.rene.pomodorotrello.vo.Card;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 /**

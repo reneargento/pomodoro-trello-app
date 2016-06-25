@@ -1,4 +1,4 @@
-package com.rene.pomodorotrello.activities;
+package com.rene.pomodorotrello.ui.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import com.rene.pomodorotrello.R;
 import com.rene.pomodorotrello.controllers.SessionController;
+import com.rene.pomodorotrello.ui.configuration.ConfigActivity;
+import com.rene.pomodorotrello.ui.tasks.TasksActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -22,7 +24,7 @@ public class SplashActivity extends AppCompatActivity {
         Intent intent;
 
         SessionController sessionController = new SessionController();
-        if (sessionController.isConnected(getApplicationContext())){
+        if (sessionController.isConnected()){
             intent = new Intent(this, TasksActivity.class);
         } else {
             intent = new Intent(this, ConfigActivity.class);

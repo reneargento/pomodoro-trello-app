@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context="com.rene.pomodorotrello.fragments.TasksFragment">
+    tools:context=".ui.tasks.TasksFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/todo_recycler_view"

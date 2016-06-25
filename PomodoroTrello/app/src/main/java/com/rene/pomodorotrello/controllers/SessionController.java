@@ -11,24 +11,26 @@ import io.oauth.OAuth;
 import io.oauth.OAuthCallback;
 import io.oauth.OAuthData;
 
+import static com.rene.pomodorotrello.application.PomodoroTrelloApplication.getContext;
+
 /**
  * Created by rene on 6/14/16.
  */
 
 public class SessionController {
 
-    public void login (final Context context, final ConnectionCallback connectionCallback) {
+    public void login (final ConnectionCallback connectionCallback) {
 
-        OAuth oAuth = new OAuth(context);
+        OAuth oAuth = new OAuth(getContext());
 
         oAuth.initialize(Constants.PUBLIC_KEY);
 
-        oAuth.popup("trello", new OAuthCallback() {
+        oAuth.popup(Constants.TRELLO_KEY, new OAuthCallback() {
             @Override
             public void onFinished(OAuthData data) {
-                if (!data.status.equals("error")) {
+                if (!data.status.equals(Constants.ERROR_KEY)) {
 
-                    SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(context);
+                    SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(getContext());
                     sharedPreferencesHelper.saveValue(SharedPreferencesHelper.TOKEN_KEY, data.token);
                     Log.d(Constants.LOG_KEY,"Expires in: " + data.expires_in);
 
@@ -43,8 +45,8 @@ public class SessionController {
 
     }
 
-    public boolean isConnected(Context context){
-        SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(context);
+    public boolean isConnected(){
+        SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(getContext());
         String token = sharedPreferencesHelper.getValue(SharedPreferencesHelper.TOKEN_KEY);
         return token != null;
     }

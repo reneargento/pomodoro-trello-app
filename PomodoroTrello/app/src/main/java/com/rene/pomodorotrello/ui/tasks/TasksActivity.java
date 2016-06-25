@@ -1,4 +1,4 @@
-package com.rene.pomodorotrello.activities;
+package com.rene.pomodorotrello.ui.tasks;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,8 +22,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.rene.pomodorotrello.R;
-import com.rene.pomodorotrello.fragments.PomodoroFragment;
-import com.rene.pomodorotrello.fragments.TasksFragment;
+import com.rene.pomodorotrello.ui.configuration.ConfigActivity;
+import com.rene.pomodorotrello.ui.pomodoro.PomodoroActivity;
 import com.rene.pomodorotrello.util.Constants;
 
 public class TasksActivity extends AppCompatActivity

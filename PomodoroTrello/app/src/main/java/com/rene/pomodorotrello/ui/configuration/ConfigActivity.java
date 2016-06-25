@@ -1,22 +1,23 @@
-package com.rene.pomodorotrello.activities;
+package com.rene.pomodorotrello.ui.configuration;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.rene.pomodorotrello.R;
-import com.rene.pomodorotrello.fragments.PomodoroFragment;
+import com.rene.pomodorotrello.ui.tasks.TasksActivity;
+import com.rene.pomodorotrello.ui.pomodoro.PomodoroActivity;
 
-public class PomodoroActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class ConfigActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    private PomodoroFragment pomodoroFragment;
+    private ConfigFragment configFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +36,9 @@ public class PomodoroActivity extends AppCompatActivity implements NavigationVie
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        pomodoroFragment = new PomodoroFragment();
+        configFragment = new ConfigFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.mainFrame, pomodoroFragment);
+        fragmentTransaction.replace(R.id.mainFrame, configFragment);
         fragmentTransaction.commit();
     }
 
@@ -49,8 +50,8 @@ public class PomodoroActivity extends AppCompatActivity implements NavigationVie
         if (id == R.id.nav_tasks) {
             Intent intent = new Intent(this, TasksActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_config) {
-            Intent intent = new Intent(this, ConfigActivity.class);
+        } else if (id == R.id.nav_pomodoro) {
+            Intent intent = new Intent(this, PomodoroActivity.class);
             startActivity(intent);
         }
 
@@ -62,9 +63,19 @@ public class PomodoroActivity extends AppCompatActivity implements NavigationVie
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
-
-        if (pomodoroFragment != null) {
-            pomodoroFragment.userIsInteracting = true;
+        if (configFragment != null) {
+            configFragment.isUserInteracting = true;
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
 }

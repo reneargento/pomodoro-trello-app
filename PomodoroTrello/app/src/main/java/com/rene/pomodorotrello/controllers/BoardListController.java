@@ -1,22 +1,20 @@
 package com.rene.pomodorotrello.controllers;
 
-import android.content.Context;
-
 import com.rene.pomodorotrello.dao.SharedPreferencesHelper;
 import com.rene.pomodorotrello.interfaces.ItemRetriever;
 import com.rene.pomodorotrello.interfaces.TrelloAPI;
 import com.rene.pomodorotrello.util.Constants;
 import com.rene.pomodorotrello.vo.BoardList;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.GsonConverterFactory;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+
+import static com.rene.pomodorotrello.application.PomodoroTrelloApplication.getContext;
 
 /**
  * Created by rene on 6/17/16.
@@ -26,11 +24,11 @@ public class BoardListController extends TrelloObjectController {
 
     static HashMap<String, String> listCache = new HashMap<>();
 
-    public void getBoardLists(Context context, final ItemRetriever itemRetriever, String boardId) {
+    public void getBoardLists(final ItemRetriever itemRetriever, String boardId) {
 
         Retrofit retrofit = RetrofitController.getInstance();
 
-        String token = SharedPreferencesHelper.getInstance(context).getValue(SharedPreferencesHelper.TOKEN_KEY);
+        String token = SharedPreferencesHelper.getInstance(getContext()).getValue(SharedPreferencesHelper.TOKEN_KEY);
 
         if (token != null) {
             TrelloAPI trelloAPI = retrofit.create(TrelloAPI.class);
