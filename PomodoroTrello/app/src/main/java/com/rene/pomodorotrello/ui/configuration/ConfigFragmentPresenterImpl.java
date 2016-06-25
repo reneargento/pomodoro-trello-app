@@ -1,5 +1,7 @@
 package com.rene.pomodorotrello.ui.configuration;
 
+import android.content.Context;
+
 import com.rene.pomodorotrello.R;
 import com.rene.pomodorotrello.controllers.BoardController;
 
@@ -22,11 +24,11 @@ public class ConfigFragmentPresenterImpl implements ConfigFragmentPresenter {
         configFragmentInteractor = new ConfigFragmentInteractorImpl(this);
     }
 
-    // @Override
-    public void onInit() {
+    @Override
+    public void onInit(Context context) {
 
         if (!configFragmentInteractor.isConnected()) {
-            login();
+            login(context);
         } else {
             configFragmentView.setConnectButtonGone();
         }
@@ -35,8 +37,8 @@ public class ConfigFragmentPresenterImpl implements ConfigFragmentPresenter {
     }
 
     @Override
-    public void login() {
-        configFragmentInteractor.login();
+    public void login(Context context) {
+        configFragmentInteractor.login(context);
     }
 
     @Override

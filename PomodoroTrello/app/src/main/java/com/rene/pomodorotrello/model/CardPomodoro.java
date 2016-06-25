@@ -1,4 +1,4 @@
-package com.rene.pomodorotrello.vo;
+package com.rene.pomodorotrello.model;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;

@@ -11,6 +11,7 @@ import java.util.List;
 public interface PomodoroFragmentPresenter {
 
     void onInit();
+    void generateNotification(PomodoroFragmentView pomodoroFragmentView);
     void cancelNotification();
     void addTimeSpent(boolean pomodoroPerformed, long totalTime, String currentTaskTotalTimeString);
     void setTotalTimeTextViewText(String text);
@@ -26,9 +27,12 @@ public interface PomodoroFragmentPresenter {
     void setTaskCompletedButtonVisibility(boolean visible);
     void resetTotalTimeLabel();
     void resetPomodorosLabel();
-    void deleteTaskFromDatabase(int listId);
+    void deleteTaskFromDatabase(String cardName, int listId);
     void resetTimer();
     void onItemSelected();
+    String getFormattedTimeFromMilliseconds(long milliseconds);
+    void incrementPomodoroCounter(int currentPomodoroCounter);
+    void playSound();
 
     void onDestroy();
 

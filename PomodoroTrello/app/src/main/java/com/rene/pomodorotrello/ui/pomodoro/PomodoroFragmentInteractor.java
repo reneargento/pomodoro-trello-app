@@ -11,7 +11,9 @@ public interface PomodoroFragmentInteractor {
     void cancelNotification();
     void addTimeSpent(boolean pomodoroPerformed, long totalTime, String currentTaskTotalTimeString);
     void loadListItems();
-    void deleteTaskFromDatabase(int listId);
+    void deleteTaskFromDatabase(String cardName, int listId);
     void onItemSelected();
+    void incrementPomodoroCounter(int currentPomodoroCounter);
+    void playSound();
 
 }

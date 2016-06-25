@@ -7,14 +7,13 @@ import com.rene.pomodorotrello.dao.SharedPreferencesHelper;
 import com.rene.pomodorotrello.interfaces.ItemRetriever;
 import com.rene.pomodorotrello.interfaces.TrelloAPI;
 import com.rene.pomodorotrello.util.Constants;
-import com.rene.pomodorotrello.vo.Card;
+import com.rene.pomodorotrello.model.Card;
 
 import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.GsonConverterFactory;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 

@@ -1,5 +1,7 @@
 package com.rene.pomodorotrello.ui.configuration;
 
+import android.content.Context;
+
 import java.util.List;
 
 /**
@@ -8,9 +10,9 @@ import java.util.List;
 
 public interface ConfigFragmentPresenter {
 
-    void onInit();
+    void onInit(Context context);
     void onDestroy();
-    void login();
+    void login(Context context);
     void onConnectionSuccessful();
     void loadSpinners();
     void initBoardSpinnerAdapter(List<String> boardNames);

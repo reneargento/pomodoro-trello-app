@@ -52,7 +52,7 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
         initViews(view);
 
         configFragmentPresenter = new ConfigFragmentPresenterImpl(this);
-        configFragmentPresenter.onInit();
+        configFragmentPresenter.onInit(getActivity());
 
         return view;
     }
@@ -102,7 +102,7 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
             connectButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    configFragmentPresenter.login();
+                    configFragmentPresenter.login(getActivity());
                 }
             });
         }

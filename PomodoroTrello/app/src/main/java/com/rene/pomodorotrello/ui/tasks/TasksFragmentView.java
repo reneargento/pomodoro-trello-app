@@ -1,6 +1,6 @@
 package com.rene.pomodorotrello.ui.tasks;
 
-import com.rene.pomodorotrello.vo.Card;
+import com.rene.pomodorotrello.model.Card;
 
 import java.util.List;
 

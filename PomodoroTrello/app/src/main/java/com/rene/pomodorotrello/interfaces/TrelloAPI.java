@@ -1,8 +1,8 @@
 package com.rene.pomodorotrello.interfaces;
 
-import com.rene.pomodorotrello.vo.Board;
-import com.rene.pomodorotrello.vo.BoardList;
-import com.rene.pomodorotrello.vo.Card;
+import com.rene.pomodorotrello.model.Board;
+import com.rene.pomodorotrello.model.BoardList;
+import com.rene.pomodorotrello.model.Card;
 
 import java.util.List;
 

@@ -5,7 +5,7 @@ import android.util.Log;
 import com.rene.pomodorotrello.interfaces.DatabaseFetchOperation;
 import com.rene.pomodorotrello.interfaces.DeleteCardCallback;
 import com.rene.pomodorotrello.util.Constants;
-import com.rene.pomodorotrello.vo.CardPomodoro;
+import com.rene.pomodorotrello.model.CardPomodoro;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;

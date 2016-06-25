@@ -1,4 +1,4 @@
-package com.rene.pomodorotrello.vo;
+package com.rene.pomodorotrello.model;
 
 /**
  * Created by rene on 6/20/16.

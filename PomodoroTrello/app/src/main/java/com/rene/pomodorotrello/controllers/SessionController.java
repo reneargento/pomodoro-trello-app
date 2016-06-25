@@ -19,9 +19,9 @@ import static com.rene.pomodorotrello.application.PomodoroTrelloApplication.getC
 
 public class SessionController {
 
-    public void login (final ConnectionCallback connectionCallback) {
+    public void login (final Context context, final ConnectionCallback connectionCallback) {
 
-        OAuth oAuth = new OAuth(getContext());
+        OAuth oAuth = new OAuth(context);
 
         oAuth.initialize(Constants.PUBLIC_KEY);
 
@@ -30,7 +30,7 @@ public class SessionController {
             public void onFinished(OAuthData data) {
                 if (!data.status.equals(Constants.ERROR_KEY)) {
 
-                    SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(getContext());
+                    SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(context);
                     sharedPreferencesHelper.saveValue(SharedPreferencesHelper.TOKEN_KEY, data.token);
                     Log.d(Constants.LOG_KEY,"Expires in: " + data.expires_in);
 

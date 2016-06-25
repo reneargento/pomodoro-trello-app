@@ -4,7 +4,7 @@ import com.rene.pomodorotrello.dao.SharedPreferencesHelper;
 import com.rene.pomodorotrello.interfaces.ItemRetriever;
 import com.rene.pomodorotrello.interfaces.TrelloAPI;
 import com.rene.pomodorotrello.util.Constants;
-import com.rene.pomodorotrello.vo.BoardList;
+import com.rene.pomodorotrello.model.BoardList;
 
 import java.util.HashMap;
 import java.util.List;

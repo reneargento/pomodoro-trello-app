@@ -5,10 +5,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.rene.pomodorotrello.util.Constants;
-import com.rene.pomodorotrello.vo.Board;
-import com.rene.pomodorotrello.vo.BoardList;
-import com.rene.pomodorotrello.vo.Card;
-import com.rene.pomodorotrello.vo.TrelloObject;
+import com.rene.pomodorotrello.model.Board;
+import com.rene.pomodorotrello.model.BoardList;
+import com.rene.pomodorotrello.model.Card;
+import com.rene.pomodorotrello.model.TrelloObject;
 
 import java.lang.reflect.Type;
 

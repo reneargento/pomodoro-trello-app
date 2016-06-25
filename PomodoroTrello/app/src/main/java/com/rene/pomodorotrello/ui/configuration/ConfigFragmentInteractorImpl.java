@@ -1,5 +1,6 @@
 package com.rene.pomodorotrello.ui.configuration;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.rene.pomodorotrello.controllers.BoardController;
@@ -10,8 +11,8 @@ import com.rene.pomodorotrello.dao.SharedPreferencesHelper;
 import com.rene.pomodorotrello.interfaces.ConnectionCallback;
 import com.rene.pomodorotrello.interfaces.ItemRetriever;
 import com.rene.pomodorotrello.util.Constants;
-import com.rene.pomodorotrello.vo.Board;
-import com.rene.pomodorotrello.vo.BoardList;
+import com.rene.pomodorotrello.model.Board;
+import com.rene.pomodorotrello.model.BoardList;
 
 import java.util.List;
 
@@ -37,8 +38,8 @@ class ConfigFragmentInteractorImpl implements ConfigFragmentInteractor{
     }
 
     @Override
-    public void login() {
-        sessionController.login(new ConnectionCallback() {
+    public void login(Context context) {
+        sessionController.login(context, new ConnectionCallback() {
             @Override
             public void onLoginSuccess() {
                 configFragmentPresenter.onConnectionSuccessful();

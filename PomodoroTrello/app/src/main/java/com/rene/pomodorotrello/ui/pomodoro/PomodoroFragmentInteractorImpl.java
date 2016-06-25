@@ -13,8 +13,8 @@ import com.rene.pomodorotrello.interfaces.DatabaseFetchOperation;
 import com.rene.pomodorotrello.interfaces.DeleteCardCallback;
 import com.rene.pomodorotrello.interfaces.ItemRetriever;
 import com.rene.pomodorotrello.util.Constants;
-import com.rene.pomodorotrello.vo.Card;
-import com.rene.pomodorotrello.vo.CardPomodoro;
+import com.rene.pomodorotrello.model.Card;
+import com.rene.pomodorotrello.model.CardPomodoro;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -194,14 +194,25 @@ class PomodoroFragmentInteractorImpl implements PomodoroFragmentInteractor {
         pomodoroFragmentPresenter.resetTimer();
     }
 
-    private DeleteCardCallback generateDeleteCardCallback(final int listId) {
+    @Override
+    public void incrementPomodoroCounter(int currentPomodoroCounter) {
+        currentPomodoroCounter++;
+        pomodoroFragmentPresenter.setPomodorosSpentValue(String.valueOf(currentPomodoroCounter));
+    }
+
+    @Override
+    public void playSound() {
+        PomodoroController pomodoroController = new PomodoroController();
+        pomodoroController.playSound();
+    }
+
+    private DeleteCardCallback generateDeleteCardCallback(final String cardName, final int listId) {
 
         return new DeleteCardCallback() {
             @Override
             public void onDeleteSuccessful(String cardId) {
                 moveDoingTaskTo(listId, cardId);
 
-                String cardName = pomodoroFragmentPresenter.getDoingListSpinnerSelectedItem();
                 if (cardName != null) {
                     updateTimeAndPomodoroLabels(cardName);
                 }
@@ -232,10 +243,8 @@ class PomodoroFragmentInteractorImpl implements PomodoroFragmentInteractor {
     }
 
     @Override
-    public void deleteTaskFromDatabase(int listId) {
-        DeleteCardCallback deleteCardCallback = generateDeleteCardCallback(listId);
-
-        String cardName = pomodoroFragmentPresenter.getDoingListSpinnerSelectedItem();
+    public void deleteTaskFromDatabase(String cardName, int listId) {
+        DeleteCardCallback deleteCardCallback = generateDeleteCardCallback(cardName, listId);
 
         if (cardName != null) {
             CardDatabaseController cardDatabaseController = new CardDatabaseController();

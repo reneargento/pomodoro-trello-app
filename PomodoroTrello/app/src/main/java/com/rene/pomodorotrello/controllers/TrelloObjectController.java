@@ -1,6 +1,6 @@
 package com.rene.pomodorotrello.controllers;
 
-import com.rene.pomodorotrello.vo.TrelloObject;
+import com.rene.pomodorotrello.model.TrelloObject;
 
 import java.util.ArrayList;
 import java.util.List;

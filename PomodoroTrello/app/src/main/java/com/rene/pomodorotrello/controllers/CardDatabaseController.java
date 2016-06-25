@@ -9,8 +9,8 @@ import com.rene.pomodorotrello.dao.CardDatabaseManager;
 import com.rene.pomodorotrello.interfaces.DatabaseFetchOperation;
 import com.rene.pomodorotrello.interfaces.DeleteCardCallback;
 import com.rene.pomodorotrello.util.Constants;
-import com.rene.pomodorotrello.vo.Card;
-import com.rene.pomodorotrello.vo.CardPomodoro;
+import com.rene.pomodorotrello.model.Card;
+import com.rene.pomodorotrello.model.CardPomodoro;
 
 import java.util.List;
 

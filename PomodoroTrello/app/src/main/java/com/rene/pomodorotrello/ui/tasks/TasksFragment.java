@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.rene.pomodorotrello.R;
 import com.rene.pomodorotrello.adapters.TaskAdapter;
 import com.rene.pomodorotrello.util.Constants;
-import com.rene.pomodorotrello.vo.Card;
+import com.rene.pomodorotrello.model.Card;
 
 import java.util.List;
 

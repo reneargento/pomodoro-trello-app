@@ -14,8 +14,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.rene.pomodorotrello.R;
-import com.rene.pomodorotrello.controllers.NotificationController;
-import com.rene.pomodorotrello.controllers.PomodoroController;
 import com.rene.pomodorotrello.util.Constants;
 
 import java.util.List;
@@ -118,7 +116,8 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pomodoroFragmentPresenter.deleteTaskFromDatabase(Constants.TO_DO_ID);
+                String cardName = getDoingListSpinnerSelectedItem();
+                pomodoroFragmentPresenter.deleteTaskFromDatabase(cardName, Constants.TO_DO_ID);
             }
         });
 
@@ -126,7 +125,8 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pomodoroFragmentPresenter.deleteTaskFromDatabase(Constants.DONE_ID);
+                String cardName = getDoingListSpinnerSelectedItem();
+                pomodoroFragmentPresenter.deleteTaskFromDatabase(cardName, Constants.DONE_ID);
             }
         });
 
@@ -154,16 +154,14 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
             public void onTick(long millisUntilFinished) {
                 totalTime = millisUntilFinished;
 
-                PomodoroController pomodoroController = new PomodoroController();
-                timerTextView.setText(pomodoroController.getFormattedTimeFromMilliseconds(millisUntilFinished));
+                timerTextView.setText(pomodoroFragmentPresenter.getFormattedTimeFromMilliseconds(millisUntilFinished));
             }
 
             @Override
             public void onFinish() {
                 //Is the application running on the background?
                 if (!isAdded()) {
-                    NotificationController notificationController = new NotificationController(getContext());
-                    notificationController.generateNotification();
+                    pomodoroFragmentPresenter.generateNotification(PomodoroFragment.this);
                 }
 
                 if (!isOnBreak) {
@@ -245,16 +243,14 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
 
     private void pomodoroPerformed() {
         //Increment pomodoro counter on the screen
+
         int pomodoroCounter = Integer.parseInt(pomodorosSpentTextView.getText().toString());
-        pomodoroCounter++;
-        pomodorosSpentTextView.setText(String.valueOf(pomodoroCounter));
+        pomodoroFragmentPresenter.incrementPomodoroCounter(pomodoroCounter);
 
         pomodoroFragmentPresenter.addTimeSpent(true, totalTime, totalTimeTextView.getText().toString());
         resetTimer();
 
-        //Play sound
-        PomodoroController pomodoroController = new PomodoroController();
-        pomodoroController.playSound(getContext());
+        pomodoroFragmentPresenter.playSound();
 
         isPomodoroCompleted = true;
         changeTaskCompletedButtonsVisibility(true);
@@ -276,8 +272,6 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         totalTime = duration;
         startTimer();
     }
-
-
 
     @Override
     public void setSelectTaskTextViewGravityCenterHorizontal() {
@@ -350,4 +344,9 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         changeTaskCompletedButtonsVisibility(false);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        pomodoroFragmentPresenter.onDestroy();
+    }
 }

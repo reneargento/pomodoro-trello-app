@@ -1,17 +1,17 @@
 package com.rene.pomodorotrello.controllers;
 
-import android.content.Context;
 import android.media.MediaPlayer;
 
 import com.rene.pomodorotrello.R;
 import com.rene.pomodorotrello.interfaces.DatabaseFetchOperation;
 import com.rene.pomodorotrello.util.Constants;
-import com.rene.pomodorotrello.vo.Card;
+import com.rene.pomodorotrello.model.Card;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.TimeUnit;
+
+import static com.rene.pomodorotrello.application.PomodoroTrelloApplication.getContext;
 
 /**
  * Created by rene on 6/20/16.
@@ -40,17 +40,15 @@ public class PomodoroController {
         return TimeUnit.SECONDS.toMillis(totalSeconds);
     }
 
-    public void playSound(final Context context) {
+    public void playSound() {
 
-        if (context != null) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.tone);
-                    mediaPlayer.start();
-                }
-            }).start();
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                MediaPlayer mediaPlayer = MediaPlayer.create(getContext(), R.raw.tone);
+                mediaPlayer.start();
+            }
+        }).start();
     }
 
     public void getOrCreateAllCardsFetched(List<Card> cards, DatabaseFetchOperation databaseFetchOperation) {

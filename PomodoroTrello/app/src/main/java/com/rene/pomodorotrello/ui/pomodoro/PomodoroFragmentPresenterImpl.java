@@ -1,19 +1,25 @@
 package com.rene.pomodorotrello.ui.pomodoro;
 
-import com.rene.pomodorotrello.interfaces.DeleteCardCallback;
+import com.rene.pomodorotrello.controllers.CardDatabaseController;
+import com.rene.pomodorotrello.controllers.NotificationController;
+import com.rene.pomodorotrello.controllers.PomodoroController;
+import com.rene.pomodorotrello.model.Card;
+import com.rene.pomodorotrello.util.Constants;
 
 import java.util.List;
+
+import static com.rene.pomodorotrello.application.PomodoroTrelloApplication.getContext;
 
 /**
  * Created by rene on 6/24/16.
  */
 
-public class PomodoroFragmentPresenterImpl implements PomodoroFragmentPresenter{
+class PomodoroFragmentPresenterImpl implements PomodoroFragmentPresenter{
 
     private PomodoroFragmentView pomodoroFragmentView;
     private PomodoroFragmentInteractor pomodoroFragmentInteractor;
 
-    public PomodoroFragmentPresenterImpl(PomodoroFragmentView pomodoroFragmentView) {
+    PomodoroFragmentPresenterImpl(PomodoroFragmentView pomodoroFragmentView) {
         this.pomodoroFragmentView = pomodoroFragmentView;
         pomodoroFragmentInteractor = new PomodoroFragmentInteractorImpl(this);
     }
@@ -21,7 +27,19 @@ public class PomodoroFragmentPresenterImpl implements PomodoroFragmentPresenter{
     @Override
     public void onInit() {
         pomodoroFragmentView.setSelectTaskTextViewGravityCenterHorizontal();
+    }
 
+    @Override
+    public void generateNotification(PomodoroFragmentView pomodoroFragmentView) {
+        if (this.pomodoroFragmentView == null) {
+            this.pomodoroFragmentView = pomodoroFragmentView;
+        }
+        if (pomodoroFragmentInteractor == null) {
+            pomodoroFragmentInteractor = new PomodoroFragmentInteractorImpl(this);
+        }
+
+        NotificationController notificationController = new NotificationController(getContext());
+        notificationController.generateNotification();
     }
 
     @Override
@@ -38,7 +56,6 @@ public class PomodoroFragmentPresenterImpl implements PomodoroFragmentPresenter{
     public void setTotalTimeTextViewText(String text) {
         pomodoroFragmentView.setTotalTimeTextViewText(text);
     }
-
 
     @Override
     public String getDoingListSpinnerSelectedItem() {
@@ -101,8 +118,8 @@ public class PomodoroFragmentPresenterImpl implements PomodoroFragmentPresenter{
     }
 
     @Override
-    public void deleteTaskFromDatabase(int listId) {
-        pomodoroFragmentInteractor.deleteTaskFromDatabase(listId);
+    public void deleteTaskFromDatabase(String cardName, int listId) {
+        pomodoroFragmentInteractor.deleteTaskFromDatabase(cardName, listId);
     }
 
     @Override
@@ -116,7 +133,24 @@ public class PomodoroFragmentPresenterImpl implements PomodoroFragmentPresenter{
     }
 
     @Override
-    public void onDestroy() {
+    public String getFormattedTimeFromMilliseconds(long milliseconds) {
+        PomodoroController pomodoroController = new PomodoroController();
+        return pomodoroController.getFormattedTimeFromMilliseconds(milliseconds);
+    }
 
+    @Override
+    public void incrementPomodoroCounter(int currentPomodoroCounter) {
+        pomodoroFragmentInteractor.incrementPomodoroCounter(currentPomodoroCounter);
+    }
+
+    @Override
+    public void playSound() {
+        pomodoroFragmentInteractor.playSound();
+    }
+
+    @Override
+    public void onDestroy() {
+        pomodoroFragmentView = null;
+        pomodoroFragmentInteractor = null;
     }
 }
