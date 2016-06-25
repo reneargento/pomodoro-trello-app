@@ -1,10 +1,8 @@
 package com.rene.pomodorotrello.ui.pomodoro;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,32 +14,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.rene.pomodorotrello.R;
-import com.rene.pomodorotrello.controllers.CardDatabaseController;
 import com.rene.pomodorotrello.controllers.NotificationController;
 import com.rene.pomodorotrello.controllers.PomodoroController;
-import com.rene.pomodorotrello.controllers.SessionController;
-import com.rene.pomodorotrello.controllers.TaskController;
-import com.rene.pomodorotrello.dao.SharedPreferencesHelper;
-import com.rene.pomodorotrello.interfaces.DatabaseFetchOperation;
-import com.rene.pomodorotrello.interfaces.DeleteCardCallback;
-import com.rene.pomodorotrello.interfaces.ItemRetriever;
 import com.rene.pomodorotrello.util.Constants;
-import com.rene.pomodorotrello.vo.Card;
-import com.rene.pomodorotrello.vo.CardPomodoro;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.RealmObject;
 
 import static com.rene.pomodorotrello.R.id.doing_spinner;
 
 @SuppressWarnings("unchecked")
-public class PomodoroFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+public class PomodoroFragment extends Fragment implements AdapterView.OnItemSelectedListener, PomodoroFragmentView {
 
     private Spinner doingListSpinner;
     private ArrayAdapter doingListSpinnerAdapter;
 
+    private TextView selectTask;
     private TextView totalTimeTextView;
     private TextView pomodorosSpentTextView;
     private TextView timerTextView;
@@ -61,7 +48,7 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
 
     private long totalTime = Constants.POMODORO_DEFAULT_TIME;
 
-    private Context appContext;
+    private PomodoroFragmentPresenter pomodoroFragmentPresenter;
 
     public PomodoroFragment() {
         // Required empty public constructor
@@ -70,9 +57,6 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        NotificationController notificationController = new NotificationController(getContext());
-        notificationController.cancelNotification();
     }
 
     @Override
@@ -83,20 +67,23 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
 
         initViews(view);
 
-        appContext = getContext().getApplicationContext();
+        pomodoroFragmentPresenter = new PomodoroFragmentPresenterImpl(this);
+        pomodoroFragmentPresenter.onInit();
+
+        pomodoroFragmentPresenter.cancelNotification();
+
+        pomodoroFragmentPresenter.loadListItems();
 
         return view;
     }
 
     private void initViews(View view) {
-        TextView selectTask = (TextView) view.findViewById(R.id.select_text_view);
-        selectTask.setGravity(Gravity.CENTER_HORIZONTAL);
+        selectTask = (TextView) view.findViewById(R.id.select_text_view);
 
         doingListSpinner = (Spinner) view.findViewById(R.id.doing_spinner);
         doingListSpinner.setOnItemSelectedListener(this);
 
         doingListSpinnerAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item);
-        loadListItems();
 
         initCardDetails(view);
     }
@@ -120,7 +107,8 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
             @Override
             public void onClick(View view) {
                 if(!isOnBreak) {
-                    addTimeSpent(false);
+                    pomodoroFragmentPresenter.addTimeSpent(false, totalTime, totalTimeTextView.getText().toString());
+
                     resetTimer();
                 }
             }
@@ -130,8 +118,7 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DeleteCardCallback deleteCardCallback = generateDeleteCardCallback(Constants.TO_DO_ID);
-                deleteTaskFromDatabase(deleteCardCallback);
+                pomodoroFragmentPresenter.deleteTaskFromDatabase(Constants.TO_DO_ID);
             }
         });
 
@@ -139,8 +126,7 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DeleteCardCallback deleteCardCallback = generateDeleteCardCallback(Constants.DONE_ID);
-                deleteTaskFromDatabase(deleteCardCallback);
+                pomodoroFragmentPresenter.deleteTaskFromDatabase(Constants.DONE_ID);
             }
         });
 
@@ -176,7 +162,7 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
             public void onFinish() {
                 //Is the application running on the background?
                 if (!isAdded()) {
-                    NotificationController notificationController = new NotificationController(appContext);
+                    NotificationController notificationController = new NotificationController(getContext());
                     notificationController.generateNotification();
                 }
 
@@ -189,60 +175,6 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         }.start();
     }
 
-    private void loadListItems() {
-        SessionController sessionController = new SessionController();
-        if (sessionController.isConnected()){
-
-            SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(getContext());
-            final String doingListName = sharedPreferencesHelper.getValue(SharedPreferencesHelper.SELECTED_DOING_LIST_KEY);
-
-            if (doingListName != null) {
-                //User is connected and has selected a list
-                final TaskController taskController = new TaskController();
-                taskController.getCardsFromList(new ItemRetriever() {
-                    @Override
-                    public void retrieveItems(Object items) {
-                        final List<Card> doingList = (List<Card>) items;
-
-                        List<String> doingListNames = taskController.getNamesFromList(doingList);
-                        initSpinnerAdapter(doingListSpinner, doingListSpinnerAdapter, doingListNames);
-
-                        PomodoroController getOrCreateAllCardsFetched = new PomodoroController();
-                        //Used to get attributes totalMillisecondsSpent and pomodoros that are not in the server
-                        getOrCreateAllCardsFetched.getOrCreateAllCardsFetched(doingList, new DatabaseFetchOperation() {
-                            @Override
-                            public void onOperationSuccess(List<? extends RealmObject> objectList) {
-                                List<CardPomodoro> firstCard = (List<CardPomodoro>) objectList;
-
-                                if (firstCard != null && firstCard.size() > 0 && firstCard.get(0).name.
-                                        equals(doingList.get(0).name)) {
-                                    updateTimeAndPomodoroLabels(firstCard.get(0));
-                                }
-                            }
-
-                            @Override
-                            public void onOperationError() {
-
-                            }
-                        });
-                    }
-                }, Constants.DOING_ID);
-            } else{
-                //User is connected, but has not selected a board  yet
-                List<String> defaultLabel = new ArrayList<>(1);
-                defaultLabel.add(getActivity().getResources().getString(R.string.select_board));
-
-                initSpinnerAdapter(doingListSpinner, doingListSpinnerAdapter, defaultLabel);
-            }
-        } else {
-            //User is not connected
-            List<String> defaultLabel = new ArrayList<>(1);
-            defaultLabel.add(getActivity().getResources().getString(R.string.connect_warning));
-
-            initSpinnerAdapter(doingListSpinner, doingListSpinnerAdapter, defaultLabel);
-        }
-    }
-
     private void initSpinnerAdapter(Spinner spinner, ArrayAdapter arrayAdapter, List<String> labels) {
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         arrayAdapter.clear();
@@ -252,35 +184,9 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
 
     //Spinner callbacks
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-
         if (parent.getId() == doing_spinner && userIsInteracting) {
-            //If card does not exist on database, create it
-            if (doingListSpinner != null && doingListSpinner.getSelectedItem() != null) {
-                CardDatabaseController cardDatabaseController = new CardDatabaseController();
-                String name = (String) doingListSpinner.getSelectedItem();
-                cardDatabaseController.getCardByName(name, new DatabaseFetchOperation() {
-                    @Override
-                    public void onOperationSuccess(List<? extends RealmObject> objectList) {
-
-                        List<CardPomodoro> cardList = (List<CardPomodoro>) objectList;
-                        if(cardList != null && cardList.size() > 0) {
-                            updateTimeAndPomodoroLabels(cardList.get(0));
-                        } else {
-                            resetPomodorosLabel();
-                            resetTotalTimeLabel();
-                        }
-                    }
-
-                    @Override
-                    public void onOperationError() {
-                        Log.e(Constants.LOG_KEY, "An exception occurred while fetching card from spinner");
-                    }
-                });
-            }
-
-            resetTimer();
+            pomodoroFragmentPresenter.onItemSelected();
         }
-
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
@@ -310,29 +216,8 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         }
     }
 
-    private void addTimeSpent(boolean pomodoroPerformed) {
-
-        long timeSpent = Constants.POMODORO_DEFAULT_TIME - totalTime;
-
-        String currentTaskTotalTimeString = totalTimeTextView.getText().toString();
-
-        PomodoroController pomodoroController = new PomodoroController();
-        @SuppressWarnings("redundant") //using currentTaskTotalTime for code readability
-                long currentTaskTotalTime = pomodoroController.getMillisecondsFromFormattedTime(currentTaskTotalTimeString);
-
-        long newTotalTime = currentTaskTotalTime;
-        if(pomodoroPerformed) {
-            newTotalTime = newTotalTime + Constants.POMODORO_DEFAULT_TIME;
-        } else {
-            newTotalTime = newTotalTime + timeSpent;
-        }
-
-        totalTimeTextView.setText(pomodoroController.getFormattedTimeFromMilliseconds(newTotalTime));
-
-        updateCardOnDatabase(newTotalTime, pomodoroPerformed);
-    }
-
-    private void resetTimer(){
+    @Override
+    public void resetTimer(){
 
         totalTime = Constants.POMODORO_DEFAULT_TIME;
         if(countDownTimer != null) {
@@ -348,11 +233,13 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         }
     }
 
-    private void resetTotalTimeLabel() {
+    @Override
+    public void resetTotalTimeLabel() {
         totalTimeTextView.setText(getString(R.string.zero_time_hours));
     }
 
-    private void resetPomodorosLabel() {
+    @Override
+    public void resetPomodorosLabel() {
         pomodorosSpentTextView.setText(String.valueOf(0));
     }
 
@@ -362,7 +249,7 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         pomodoroCounter++;
         pomodorosSpentTextView.setText(String.valueOf(pomodoroCounter));
 
-        addTimeSpent(true);
+        pomodoroFragmentPresenter.addTimeSpent(true, totalTime, totalTimeTextView.getText().toString());
         resetTimer();
 
         //Play sound
@@ -382,54 +269,6 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         longBreakButton.setVisibility(visibility);
     }
 
-    private void moveDoingTaskTo(int listId, String cardId) {
-        final TaskController taskController = new TaskController();
-        taskController.moveTask(cardId, Constants.DOING_ID, listId);
-
-        if (listId == Constants.DONE_ID) {
-            final int pomodoroCounter = Integer.parseInt(pomodorosSpentTextView.getText().toString());
-            final String totalTimeSpentString = totalTimeTextView.getText().toString();
-
-            String generateCommentForFinishedTask = taskController.generateCommentForFinishedTask(pomodoroCounter, totalTimeSpentString);
-            taskController.addCommentToTask(cardId, generateCommentForFinishedTask);
-        }
-
-        doingListSpinnerAdapter.remove(doingListSpinner.getSelectedItem());
-        doingListSpinnerAdapter.notifyDataSetChanged();
-
-        if(doingListSpinnerAdapter.getCount() == 0) {
-            changeTaskCompletedButtonsVisibility(false);
-
-            resetTotalTimeLabel();
-            resetPomodorosLabel();
-        }
-
-    }
-
-    private void deleteTaskFromDatabase(DeleteCardCallback deleteCardCallback) {
-        if (doingListSpinner != null && doingListSpinner.getSelectedItem() != null) {
-            String name = (String) doingListSpinner.getSelectedItem();
-
-            CardDatabaseController cardDatabaseController = new CardDatabaseController();
-            cardDatabaseController.deleteCard(name, deleteCardCallback);
-        }
-    }
-
-    private DeleteCardCallback generateDeleteCardCallback(final int listId) {
-
-        return new DeleteCardCallback() {
-            @Override
-            public void onDeleteSuccessful(String cardId) {
-                moveDoingTaskTo(listId, cardId);
-
-                if (doingListSpinner != null) {
-                    String cardName = (String) doingListSpinner.getSelectedItem();
-                    updateTimeAndPomodoroLabels(cardName);
-                }
-            }
-        };
-    }
-
     private void startBreak(long duration) {
         countDownTimer.cancel();
 
@@ -438,72 +277,77 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         startTimer();
     }
 
-    private void updateTimeAndPomodoroLabels(final CardPomodoro cardPomodoro) {
 
-        PomodoroController pomodoroController = new PomodoroController();
+
+    @Override
+    public void setSelectTaskTextViewGravityCenterHorizontal() {
+        selectTask.setGravity(Gravity.CENTER_HORIZONTAL);
+    }
+
+    @Override
+    public void setTotalTimeTextViewText(String text) {
+        totalTimeTextView.setText(text);
+    }
+
+    @Override
+    public String getDoingListSpinnerSelectedItem() {
+        String selectedItem = null;
+
+        if (doingListSpinner != null) {
+            selectedItem = (String) doingListSpinner.getSelectedItem();
+        }
+        return selectedItem;
+    }
+
+    @Override
+    public int getPomodorosSpentTextViewValue() {
+        int pomodorosSpent = 0;
+
+        if (pomodorosSpentTextView != null) {
+            pomodorosSpent = Integer.parseInt(pomodorosSpentTextView.getText().toString());
+        }
+
+        return pomodorosSpent;
+    }
+
+    @Override
+    public void initSpinnerAdapter(List<String> doingListNames) {
+        initSpinnerAdapter(doingListSpinner, doingListSpinnerAdapter, doingListNames);
+    }
+
+    @Override
+    public void setFormattedTimeOnTotalTimeTextView(String formattedTime) {
         if (totalTimeTextView != null) {
-            totalTimeTextView.setText(pomodoroController.getFormattedTimeFromMilliseconds(cardPomodoro.totalMillisecondsSpent));
+            totalTimeTextView.setText(formattedTime);
         }
+    }
 
+    @Override
+    public void setPomodorosSpentValue(String pomodorosSpent) {
         if (pomodorosSpentTextView != null) {
-            pomodorosSpentTextView.setText(String.valueOf(cardPomodoro.pomodoros));
+            pomodorosSpentTextView.setText(pomodorosSpent);
         }
     }
 
-    private void updateTimeAndPomodoroLabels(String cardName) {
-
-        CardDatabaseController cardDatabaseController = new CardDatabaseController();
-        cardDatabaseController.getCardByName(cardName, new DatabaseFetchOperation() {
-            @Override
-            public void onOperationSuccess(List<? extends RealmObject> objectList) {
-                if (objectList.size() > 0) {
-                    List<CardPomodoro> cardPomodoroList = (List<CardPomodoro>) objectList;
-                    CardPomodoro cardPomodoro = cardPomodoroList.get(0);
-
-                    PomodoroController pomodoroController = new PomodoroController();
-                    if (totalTimeTextView != null) {
-                        totalTimeTextView.setText(pomodoroController.getFormattedTimeFromMilliseconds(cardPomodoro.totalMillisecondsSpent));
-                    }
-
-                    if (pomodorosSpentTextView != null) {
-                        pomodorosSpentTextView.setText(String.valueOf(cardPomodoro.pomodoros));
-                    }
-                }
-            }
-
-            @Override
-            public void onOperationError() {
-                Log.e(Constants.LOG_KEY, "An error occurred while updating views");
-            }
-        });
+    @Override
+    public String getTotalTimeTextView() {
+        return totalTimeTextView.getText().toString();
     }
 
-    private void updateCardOnDatabase(long newTotalTime, boolean pomodoroPerformed) {
-        final Card updatedCard = new Card();
-
-        //Saves time and pomodoro counter on database
-        CardDatabaseController cardDatabaseController = new CardDatabaseController();
-        String name = (String) doingListSpinner.getSelectedItem();
-        cardDatabaseController.getCardByName(name, new DatabaseFetchOperation() {
-            @Override
-            public void onOperationSuccess(List<? extends RealmObject> objectList) {
-
-                List<CardPomodoro> cardList = (List<CardPomodoro>) objectList;
-                if(cardList != null && cardList.size() > 0) {
-                    updatedCard.name = cardList.get(0).name;
-                }
-            }
-
-            @Override
-            public void onOperationError() {
-                Log.e(Constants.LOG_KEY, "An exception occurred while updating a card");
-            }
-        });
-
-        updatedCard.totalMillisecondsSpent = newTotalTime;
-        if (pomodorosSpentTextView != null) {
-            updatedCard.pomodoros = Integer.parseInt(pomodorosSpentTextView.getText().toString());
-        }
-        cardDatabaseController.updateCard(updatedCard);
+    @Override
+    public void removeCurrentlySelectedItemFromAdapter() {
+        doingListSpinnerAdapter.remove(doingListSpinner.getSelectedItem());
+        doingListSpinnerAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    public int getDoingListItemsCount() {
+        return doingListSpinnerAdapter.getCount();
+    }
+
+    @Override
+    public void setTaskCompletedButtonVisibility(boolean visible) {
+        changeTaskCompletedButtonsVisibility(false);
+    }
+
 }
