@@ -12,8 +12,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.rene.pomodorotrello.R;
+import com.rene.pomodorotrello.tracker.MixpanelDelegate;
 import com.rene.pomodorotrello.ui.configuration.ConfigActivity;
 import com.rene.pomodorotrello.ui.tasks.TasksActivity;
+import com.rene.pomodorotrello.util.Constants;
 
 public class PomodoroActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -40,6 +42,12 @@ public class PomodoroActivity extends AppCompatActivity implements NavigationVie
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.mainFrame, pomodoroFragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        MixpanelDelegate.track(Constants.MIXPANEL_ACCESSED_POMODORO_EVENT, null);
     }
 
     @Override

@@ -28,53 +28,53 @@ public class TaskController extends TrelloObjectController {
     public void getCardsFromList(final ItemRetriever itemRetriever, int listId) {
         switch (listId) {
             case Constants.TO_DO_ID:
-                getToDoCards(getContext(), itemRetriever);
+                getToDoCards(itemRetriever);
                 break;
             case Constants.DOING_ID:
-                getDoingCards(getContext(), itemRetriever);
+                getDoingCards(itemRetriever);
                 break;
             case Constants.DONE_ID:
-                getDoneCards(getContext(), itemRetriever);
+                getDoneCards(itemRetriever);
                 break;
         }
     }
 
-    private void getToDoCards(Context context, final ItemRetriever itemRetriever) {
+    private void getToDoCards(final ItemRetriever itemRetriever) {
 
-        SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(context);
+        SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance();
         String toDoListName = sharedPreferencesHelper.getValue(SharedPreferencesHelper.SELECTED_TODO_LIST_KEY);
 
         if (toDoListName != null) {
-            getCards(context, itemRetriever, toDoListName);
+            getCards(itemRetriever, toDoListName);
         }
     }
 
-    private void getDoingCards(Context context, final ItemRetriever itemRetriever) {
+    private void getDoingCards(final ItemRetriever itemRetriever) {
 
-        SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(context);
+        SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance();
         String doingListName = sharedPreferencesHelper.getValue(SharedPreferencesHelper.SELECTED_DOING_LIST_KEY);
 
         if (doingListName != null) {
-            getCards(context, itemRetriever, doingListName);
+            getCards(itemRetriever, doingListName);
         }
     }
 
-    private void getDoneCards(Context context, final ItemRetriever itemRetriever) {
+    private void getDoneCards(final ItemRetriever itemRetriever) {
 
-        SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(context);
+        SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance();
         String doneListName = sharedPreferencesHelper.getValue(SharedPreferencesHelper.SELECTED_DONE_LIST_KEY);
 
         if (doneListName != null) {
-            getCards(context, itemRetriever, doneListName);
+            getCards(itemRetriever, doneListName);
         }
     }
 
     @SuppressWarnings("unchecked")
-    private void getCards(Context context, final ItemRetriever itemRetriever, String listName) {
+    private void getCards(final ItemRetriever itemRetriever, String listName) {
 
         if (listName != null) {
             ObjectStreamHelper objectStreamHelper = ObjectStreamHelper.getInstance();
-            Map<String, String> selectedLists = (Map) objectStreamHelper.readMapObject(context,
+            Map<String, String> selectedLists = (Map) objectStreamHelper.readMapObject(getContext(),
                     ObjectStreamHelper.SELECTED_LISTS_FILE_KEY);
 
             String listId = selectedLists.get(listName);
@@ -83,7 +83,7 @@ public class TaskController extends TrelloObjectController {
 
                 Retrofit retrofit = RetrofitController.getInstance();
 
-                String token = SharedPreferencesHelper.getInstance(context).getValue(SharedPreferencesHelper.TOKEN_KEY);
+                String token = SharedPreferencesHelper.getInstance().getValue(SharedPreferencesHelper.TOKEN_KEY);
 
                 if (token != null) {
                     TrelloAPI trelloAPI = retrofit.create(TrelloAPI.class);

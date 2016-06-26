@@ -16,7 +16,7 @@ public class ConfigController {
     public void saveSettings(String boardName, String toDoListName,
                              String doingListName, String doneListName){
 
-        SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(getContext());
+        SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance();
         sharedPreferencesHelper.saveValue(SharedPreferencesHelper.SELECTED_BOARD_KEY, boardName);
         sharedPreferencesHelper.saveValue(SharedPreferencesHelper.SELECTED_TODO_LIST_KEY, toDoListName);
         sharedPreferencesHelper.saveValue(SharedPreferencesHelper.SELECTED_DOING_LIST_KEY, doingListName);

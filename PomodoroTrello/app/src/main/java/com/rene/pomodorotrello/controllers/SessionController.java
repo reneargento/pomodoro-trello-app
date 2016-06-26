@@ -30,7 +30,7 @@ public class SessionController {
             public void onFinished(OAuthData data) {
                 if (!data.status.equals(Constants.ERROR_KEY)) {
 
-                    SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(context);
+                    SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance();
                     sharedPreferencesHelper.saveValue(SharedPreferencesHelper.TOKEN_KEY, data.token);
                     Log.d(Constants.LOG_KEY,"Expires in: " + data.expires_in);
 
@@ -46,7 +46,7 @@ public class SessionController {
     }
 
     public boolean isConnected(){
-        SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(getContext());
+        SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance();
         String token = sharedPreferencesHelper.getValue(SharedPreferencesHelper.TOKEN_KEY);
         return token != null;
     }

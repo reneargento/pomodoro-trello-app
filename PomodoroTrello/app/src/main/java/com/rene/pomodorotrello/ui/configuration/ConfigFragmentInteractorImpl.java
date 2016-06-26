@@ -74,7 +74,7 @@ class ConfigFragmentInteractorImpl implements ConfigFragmentInteractor{
     }
 
     private void loadListValues(String defaultBoardId) {
-        SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(getContext());
+        SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance();
         String selectedBoard = sharedPreferencesHelper.getValue(SharedPreferencesHelper.SELECTED_BOARD_KEY);
 
         if (selectedBoard != null) {
@@ -106,7 +106,7 @@ class ConfigFragmentInteractorImpl implements ConfigFragmentInteractor{
 
     private void setDefaultListItemsIfNotInteracting() {
 
-        SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(getContext());
+        SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance();
 
         String selectedBoardName = sharedPreferencesHelper.getValue(SharedPreferencesHelper.SELECTED_BOARD_KEY);
         String selectedToDoListName = sharedPreferencesHelper.getValue(SharedPreferencesHelper.SELECTED_TODO_LIST_KEY);

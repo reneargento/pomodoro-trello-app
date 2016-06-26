@@ -149,6 +149,11 @@ class PomodoroFragmentPresenterImpl implements PomodoroFragmentPresenter{
     }
 
     @Override
+    public void logPomodoroCompletedOnTracker() {
+        pomodoroFragmentInteractor.logPomodoroCompletedOnTracker();
+    }
+
+    @Override
     public void onDestroy() {
         pomodoroFragmentView = null;
         pomodoroFragmentInteractor = null;

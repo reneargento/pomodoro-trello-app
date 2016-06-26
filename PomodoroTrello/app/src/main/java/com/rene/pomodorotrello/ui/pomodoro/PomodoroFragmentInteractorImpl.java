@@ -12,6 +12,7 @@ import com.rene.pomodorotrello.dao.SharedPreferencesHelper;
 import com.rene.pomodorotrello.interfaces.DatabaseFetchOperation;
 import com.rene.pomodorotrello.interfaces.DeleteCardCallback;
 import com.rene.pomodorotrello.interfaces.ItemRetriever;
+import com.rene.pomodorotrello.tracker.MixpanelDelegate;
 import com.rene.pomodorotrello.util.Constants;
 import com.rene.pomodorotrello.model.Card;
 import com.rene.pomodorotrello.model.CardPomodoro;
@@ -80,7 +81,7 @@ class PomodoroFragmentInteractorImpl implements PomodoroFragmentInteractor {
 
         if (sessionController.isConnected()){
 
-            SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance(getContext());
+            SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance();
             final String doingListName = sharedPreferencesHelper.getValue(SharedPreferencesHelper.SELECTED_DOING_LIST_KEY);
 
             if (doingListName != null) {
@@ -252,4 +253,8 @@ class PomodoroFragmentInteractorImpl implements PomodoroFragmentInteractor {
         }
     }
 
+    @Override
+    public void logPomodoroCompletedOnTracker() {
+        MixpanelDelegate.track(Constants.MIXPANEL_COMPLETED_POMODORO_EVENT, null);
+    }
 }

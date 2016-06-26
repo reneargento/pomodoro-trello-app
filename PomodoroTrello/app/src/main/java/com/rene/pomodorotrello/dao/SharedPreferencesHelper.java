@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 
 import com.rene.pomodorotrello.R;
 
+import static com.rene.pomodorotrello.application.PomodoroTrelloApplication.getContext;
+
 /**
  * Created by rene on 6/15/16.
  */
@@ -18,6 +20,8 @@ public class SharedPreferencesHelper {
     public static final String SELECTED_TODO_LIST_KEY = "selectedToDoList";
     public static final String SELECTED_DOING_LIST_KEY = "selectedDoingList";
     public static final String SELECTED_DONE_LIST_KEY = "selectedDoneList";
+    public static final String FIRST_RUN_KEY = "firstRun";
+    public static final String FIRST_RUN_FALSE_VALUE = "false";
 
     private static SharedPreferencesHelper sharedPreferencesHelper;
     private static SharedPreferences sharedPreferences;
@@ -25,9 +29,9 @@ public class SharedPreferencesHelper {
     private SharedPreferencesHelper() {
     }
 
-    public static SharedPreferencesHelper getInstance(Context context) {
+    public static SharedPreferencesHelper getInstance() {
         if(sharedPreferencesHelper == null) {
-            sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
+            sharedPreferences = getContext().getSharedPreferences(SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
             sharedPreferencesHelper = new SharedPreferencesHelper();
         }
         return sharedPreferencesHelper;

@@ -252,6 +252,8 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
 
         pomodoroFragmentPresenter.playSound();
 
+        pomodoroFragmentPresenter.logPomodoroCompletedOnTracker();
+
         isPomodoroCompleted = true;
         changeTaskCompletedButtonsVisibility(true);
     }

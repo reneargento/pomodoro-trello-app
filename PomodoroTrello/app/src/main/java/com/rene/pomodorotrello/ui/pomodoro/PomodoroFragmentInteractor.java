@@ -15,5 +15,6 @@ public interface PomodoroFragmentInteractor {
     void onItemSelected();
     void incrementPomodoroCounter(int currentPomodoroCounter);
     void playSound();
+    void logPomodoroCompletedOnTracker();
 
 }

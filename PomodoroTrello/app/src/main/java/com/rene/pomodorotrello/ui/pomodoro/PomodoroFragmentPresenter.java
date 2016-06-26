@@ -33,6 +33,7 @@ public interface PomodoroFragmentPresenter {
     String getFormattedTimeFromMilliseconds(long milliseconds);
     void incrementPomodoroCounter(int currentPomodoroCounter);
     void playSound();
+    void logPomodoroCompletedOnTracker();
 
     void onDestroy();
 

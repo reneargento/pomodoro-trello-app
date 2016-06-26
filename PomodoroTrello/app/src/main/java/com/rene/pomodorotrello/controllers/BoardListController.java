@@ -28,7 +28,7 @@ public class BoardListController extends TrelloObjectController {
 
         Retrofit retrofit = RetrofitController.getInstance();
 
-        String token = SharedPreferencesHelper.getInstance(getContext()).getValue(SharedPreferencesHelper.TOKEN_KEY);
+        String token = SharedPreferencesHelper.getInstance().getValue(SharedPreferencesHelper.TOKEN_KEY);
 
         if (token != null) {
             TrelloAPI trelloAPI = retrofit.create(TrelloAPI.class);

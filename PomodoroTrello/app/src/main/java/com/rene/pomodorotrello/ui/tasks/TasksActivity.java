@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.rene.pomodorotrello.R;
+import com.rene.pomodorotrello.tracker.MixpanelDelegate;
 import com.rene.pomodorotrello.ui.configuration.ConfigActivity;
 import com.rene.pomodorotrello.ui.pomodoro.PomodoroActivity;
 import com.rene.pomodorotrello.util.Constants;
@@ -75,6 +76,12 @@ public class TasksActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        MixpanelDelegate.track(Constants.MIXPANEL_ACCESSED_TASKS_EVENT, null);
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         toggle.onConfigurationChanged(newConfig);
@@ -88,6 +95,12 @@ public class TasksActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        MixpanelDelegate.flush();
+        super.onDestroy();
     }
 
     @Override
