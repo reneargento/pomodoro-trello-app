@@ -47,7 +47,7 @@ public class PomodoroActivity extends AppCompatActivity implements NavigationVie
     @Override
     protected void onStart() {
         super.onStart();
-        MixpanelDelegate.track(Constants.MIXPANEL_ACCESSED_POMODORO_EVENT, null);
+        MixpanelDelegate.track(MixpanelDelegate.MIXPANEL_ACCESSED_POMODORO_EVENT, null);
     }
 
     @Override

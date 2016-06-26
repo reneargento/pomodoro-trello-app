@@ -47,7 +47,7 @@ public class ConfigActivity extends AppCompatActivity implements NavigationView.
     @Override
     protected void onStart() {
         super.onStart();
-        MixpanelDelegate.track(Constants.MIXPANEL_ACCESSED_CONFIG_EVENT, null);
+        MixpanelDelegate.track(MixpanelDelegate.MIXPANEL_ACCESSED_CONFIG_EVENT, null);
     }
 
     @Override

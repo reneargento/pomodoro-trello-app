@@ -1,7 +1,5 @@
 package com.rene.pomodorotrello.ui.tasks;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,7 +19,6 @@ import java.util.List;
 
 public class TasksFragment extends Fragment implements TasksFragmentView {
 
-    private OnFragmentInteractionListener mListener;
     static final String LIST_ID = "listId";
 
     private int listId = Constants.TO_DO_ID;
@@ -32,17 +29,6 @@ public class TasksFragment extends Fragment implements TasksFragmentView {
     private TasksFragmentPresenter tasksFragmentPresenter;
 
     public TasksFragment() {
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
@@ -72,18 +58,6 @@ public class TasksFragment extends Fragment implements TasksFragmentView {
         return view;
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
     @Override
     public void setWarningTextViewConnectText() {
         warningTextView.setText(getActivity().getResources().getString(R.string.connect_warning_to_see_tasks));
@@ -108,10 +82,6 @@ public class TasksFragment extends Fragment implements TasksFragmentView {
     public void setListCard(List<Card> cardList) {
         RecyclerView.Adapter listAdapter = new TaskAdapter(cardList, listId);
         listRecyclerView.setAdapter(listAdapter);
-    }
-
-    interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
     }
 
     @Override

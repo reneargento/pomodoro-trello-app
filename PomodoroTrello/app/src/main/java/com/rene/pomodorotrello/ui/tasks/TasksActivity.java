@@ -28,7 +28,7 @@ import com.rene.pomodorotrello.ui.pomodoro.PomodoroActivity;
 import com.rene.pomodorotrello.util.Constants;
 
 public class TasksActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, TasksFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     private ActionBarDrawerToggle toggle;
 
@@ -78,7 +78,7 @@ public class TasksActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        MixpanelDelegate.track(Constants.MIXPANEL_ACCESSED_TASKS_EVENT, null);
+        MixpanelDelegate.track(MixpanelDelegate.MIXPANEL_ACCESSED_TASKS_EVENT, null);
     }
 
     @Override
@@ -119,11 +119,6 @@ public class TasksActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
 
     private class PagerAdapter extends FragmentPagerAdapter {

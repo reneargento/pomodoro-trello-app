@@ -7,7 +7,6 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.rene.pomodorotrello.dao.SharedPreferencesHelper;
-import com.rene.pomodorotrello.util.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,11 +22,20 @@ import static com.rene.pomodorotrello.application.PomodoroTrelloApplication.getC
 
 public class MixpanelDelegate {
 
+    public final static String MIXPANEL_TOKEN = "d66097529dff5199ae693c71130efc7b";
+    public final static String MIXPANEL_USER_ID = "AdvertisingId";
+    public final static String MIXPANEL_INSTALL_APP_EVENT = "Install App";
+    public final static String MIXPANEL_OPEN_APP_EVENT = "Open App";
+    public final static String MIXPANEL_ACCESSED_CONFIG_EVENT = "Accessed Config Screen";
+    public final static String MIXPANEL_ACCESSED_TASKS_EVENT = "Accessed Tasks Screen";
+    public final static String MIXPANEL_ACCESSED_POMODORO_EVENT = "Accessed Pomodoro Screen";
+    public final static String MIXPANEL_COMPLETED_POMODORO_EVENT = "Completed a Pomodoro";
+
     private static MixpanelAPI mixpanelInstance;
     private static boolean isEnabled = false;
 
     public static void init() {
-        mixpanelInstance = MixpanelAPI.getInstance(getContext(), Constants.MIXPANEL_TOKEN);
+        mixpanelInstance = MixpanelAPI.getInstance(getContext(), MIXPANEL_TOKEN);
         isEnabled = mixpanelInstance != null;
 
         SharedPreferencesHelper sharedPreferencesHelper = SharedPreferencesHelper.getInstance();
@@ -45,12 +53,12 @@ public class MixpanelDelegate {
             try {
                 //To track the user for this sample app I am using the Android ID
                 //Ideally, we would be generating an ID in our server or using a combination of attributes
-                properties.put(Constants.MIXPANEL_USER_ID, advertisingId);
+                properties.put(MIXPANEL_USER_ID, advertisingId);
             } catch (JSONException e) {
                 //In the future we would be logging this in Fabric or Firebase
             }
             mixpanelInstance.registerSuperPropertiesOnce(properties);
-            track(Constants.MIXPANEL_INSTALL_APP_EVENT, null);
+            track(MIXPANEL_INSTALL_APP_EVENT, null);
         }
     }
 

@@ -255,6 +255,6 @@ class PomodoroFragmentInteractorImpl implements PomodoroFragmentInteractor {
 
     @Override
     public void logPomodoroCompletedOnTracker() {
-        MixpanelDelegate.track(Constants.MIXPANEL_COMPLETED_POMODORO_EVENT, null);
+        MixpanelDelegate.track(MixpanelDelegate.MIXPANEL_COMPLETED_POMODORO_EVENT, null);
     }
 }

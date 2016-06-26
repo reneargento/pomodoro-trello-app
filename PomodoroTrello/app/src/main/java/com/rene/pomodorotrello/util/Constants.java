@@ -13,14 +13,6 @@ public class Constants {
     public final static String TRELLO_KEY = "trello";
     public final static String ERROR_KEY = "error";
 
-    public final static String MIXPANEL_TOKEN = "d66097529dff5199ae693c71130efc7b";
-    public final static String MIXPANEL_USER_ID = "AdvertisingId";
-    public final static String MIXPANEL_INSTALL_APP_EVENT = "Install App";
-    public final static String MIXPANEL_ACCESSED_CONFIG_EVENT = "Accessed Config Screen";
-    public final static String MIXPANEL_ACCESSED_TASKS_EVENT = "Accessed Tasks Screen";
-    public final static String MIXPANEL_ACCESSED_POMODORO_EVENT = "Accessed Pomodoro Screen";
-    public final static String MIXPANEL_COMPLETED_POMODORO_EVENT = "Completed a Pomodoro";
-
     public static final String POMODORO_FORMAT = "%02d:%02d:%02d";
     public final static long MILLISECOND = 1000;
 

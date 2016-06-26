@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.rene.pomodorotrello.R;
 import com.rene.pomodorotrello.controllers.SessionController;
+import com.rene.pomodorotrello.tracker.MixpanelDelegate;
 import com.rene.pomodorotrello.ui.configuration.ConfigActivity;
 import com.rene.pomodorotrello.ui.tasks.TasksActivity;
 
@@ -19,6 +20,11 @@ public class SplashActivity extends AppCompatActivity {
         sendUserToNextActivity();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        MixpanelDelegate.track(MixpanelDelegate.MIXPANEL_OPEN_APP_EVENT, null);
+    }
 
     private void sendUserToNextActivity(){
         Intent intent;
