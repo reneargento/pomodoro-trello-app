@@ -17,13 +17,13 @@ public class Constants {
     public final static long MILLISECOND = 1000;
 
     //25 minutes
-    public final static long POMODORO_DEFAULT_TIME = 1000 * 60 * 60 * 25;
+    public final static long POMODORO_DEFAULT_TIME = 1000 * 60 * 25;
 
     //15 minutes
-    public final static long LONG_BREAK_DEFAULT_TIME = 1000 * 60 * 60 * 15;
+    public final static long LONG_BREAK_DEFAULT_TIME = 1000 * 60 * 15;
 
     //5 minutes
-    public final static long SHORT_BREAK_DEFAULT_TIME = 1000 * 60 * 60 * 5;
+    public final static long SHORT_BREAK_DEFAULT_TIME = 1000 * 60 * 5;
 
     public final static int TO_DO_ID = 0;
     public final static int DOING_ID = 1;

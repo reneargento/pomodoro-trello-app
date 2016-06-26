@@ -33,23 +33,16 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
 
     @BindView(R.id.select_text_view)
     TextView selectTask;
-    @BindView(R.id.total_time_value_text_view)
-    TextView totalTimeTextView;
-    @BindView(R.id.pomodoros_spent_value_text_view)
-    TextView pomodorosSpentTextView;
-    @BindView(R.id.timer)
-    TextView timerTextView;
+    private TextView totalTimeTextView;
+    private TextView pomodorosSpentTextView;
+    private TextView timerTextView;
     private CountDownTimer countDownTimer;
     @BindView(R.id.start_pause_button)
     Button startPauseButton;
 
-    @BindView(R.id.back_button)
     Button backButton;
-    @BindView(R.id.done_button)
     Button doneButton;
-    @BindView(R.id.short_break_button)
     Button shortBreakButton;
-    @BindView(R.id.long_break_button)
     Button longBreakButton;
 
     private Unbinder unbinder;
@@ -80,6 +73,9 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         View view = inflater.inflate(R.layout.fragment_pomodoro, container, false);
 
         unbinder = ButterKnife.bind(this, view);
+        timerTextView = ButterKnife.findById(view, R.id.timer);
+        pomodorosSpentTextView = ButterKnife.findById(view, R.id.pomodoros_spent_value_text_view);
+        totalTimeTextView = ButterKnife.findById(view, R.id.total_time_value_text_view);
 
         doingListSpinner.setOnItemSelectedListener(this);
         doingListSpinnerAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item);
@@ -97,6 +93,11 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
     }
 
     private void initCardDetails(View view) {
+
+        backButton = ButterKnife.findById(view, R.id.back_button);
+        doneButton = ButterKnife.findById(view, R.id.done_button);
+        shortBreakButton = ButterKnife.findById(view, R.id.short_break_button);
+        longBreakButton = ButterKnife.findById(view, R.id.long_break_button);
 
         startPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
