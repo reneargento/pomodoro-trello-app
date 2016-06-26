@@ -1,17 +1,22 @@
 package com.rene.pomodorotrello.controllers;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.rene.pomodorotrello.dao.ObjectStreamHelper;
 import com.rene.pomodorotrello.dao.SharedPreferencesHelper;
+import com.rene.pomodorotrello.interfaces.DatabaseFetchOperation;
+import com.rene.pomodorotrello.interfaces.GetTimeSpentCallback;
 import com.rene.pomodorotrello.interfaces.ItemRetriever;
 import com.rene.pomodorotrello.interfaces.TrelloAPI;
+import com.rene.pomodorotrello.model.CardPomodoro;
 import com.rene.pomodorotrello.util.Constants;
 import com.rene.pomodorotrello.model.Card;
 
 import java.util.List;
 import java.util.Map;
 
+import io.realm.RealmObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -22,7 +27,7 @@ import static com.rene.pomodorotrello.application.PomodoroTrelloApplication.getC
 /**
  * Created by rene on 6/19/16.
  */
-
+@SuppressWarnings("unchecked")
 public class TaskController extends TrelloObjectController {
 
     public void getCardsFromList(final ItemRetriever itemRetriever, int listId) {
@@ -136,6 +141,28 @@ public class TaskController extends TrelloObjectController {
                 + "h" + totalTimeSpentString.substring(firstColonIndex);
 
         return pomodoros + " pomodoros, " + formattedHour + " total spent";
+    }
+
+    public void getDoingTaskTimeSpent(String cardName, final GetTimeSpentCallback getTimeSpentCallback) {
+
+        CardDatabaseController cardDatabaseController = new CardDatabaseController();
+        cardDatabaseController.getCardByName(cardName, new DatabaseFetchOperation() {
+            @Override
+            public void onOperationSuccess(List<? extends RealmObject> objectList) {
+                List<CardPomodoro> cardList = (List<CardPomodoro>) objectList;
+                if (cardList.size() > 0) {
+                    getTimeSpentCallback.onSuccessGetTimeSpent(cardList.get(0).totalMillisecondsSpent);
+                } else {
+                    getTimeSpentCallback.onSuccessGetTimeSpent(0);
+                }
+            }
+
+            @Override
+            public void onOperationError() {
+                Log.e(Constants.LOG_KEY, "An error occurred when searching for time spent on a task");
+                getTimeSpentCallback.onFailureGetTimeSpent();
+            }
+        });
     }
 
 }

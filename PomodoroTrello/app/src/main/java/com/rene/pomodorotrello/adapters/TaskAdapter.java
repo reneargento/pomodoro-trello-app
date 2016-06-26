@@ -9,7 +9,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.rene.pomodorotrello.R;
+import com.rene.pomodorotrello.controllers.PomodoroController;
 import com.rene.pomodorotrello.controllers.TaskController;
+import com.rene.pomodorotrello.interfaces.GetTimeSpentCallback;
 import com.rene.pomodorotrello.util.Constants;
 import com.rene.pomodorotrello.model.Card;
 
@@ -28,12 +30,16 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
         TextView nameTextView;
         Button startButton;
+        TextView timeSpentTitleTextView;
+        TextView timeSpentTextView;
 
         ViewHolder(View view) {
             super(view);
 
             nameTextView = (TextView) view.findViewById(R.id.card_name);
             startButton = (Button) view.findViewById(R.id.start_task_button);
+            timeSpentTitleTextView = (TextView) view.findViewById(R.id.time_spent_title);
+            timeSpentTextView = (TextView) view.findViewById(R.id.time_spent);
         }
     }
 
@@ -55,21 +61,43 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         holder.nameTextView.setText(card.get(position).name);
         holder.nameTextView.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
 
-        if (listId != Constants.TO_DO_ID) {
-            holder.startButton.setVisibility(View.GONE);
-        } else {
+        final TaskController taskController = new TaskController();
+
+        if (listId == Constants.TO_DO_ID) {
             holder.startButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                   TaskController taskController = new TaskController();
                     taskController.moveTask(card.get(holder.getAdapterPosition()).id, Constants.TO_DO_ID, Constants.DOING_ID);
 
                     card.remove(holder.getAdapterPosition());
                     notifyItemRemoved(holder.getAdapterPosition());
                 }
             });
-        }
 
+            holder.timeSpentTitleTextView.setVisibility(View.GONE);
+        } else {
+            holder.startButton.setVisibility(View.GONE);
+
+            if (listId == Constants.DOING_ID) {
+                final PomodoroController pomodoroController = new PomodoroController();
+
+                taskController.getDoingTaskTimeSpent(card.get(position).name, new GetTimeSpentCallback() {
+                    @Override
+                    public void onSuccessGetTimeSpent(long timeSpent) {
+                        String formattedTime = pomodoroController.getFormattedTimeFromMilliseconds(timeSpent);
+                        holder.timeSpentTextView.setText(formattedTime);
+                    }
+
+                    @Override
+                    public void onFailureGetTimeSpent() {
+                        String formattedTime = pomodoroController.getFormattedTimeFromMilliseconds(0);
+                        holder.timeSpentTextView.setText(formattedTime);
+                    }
+                });
+            } else {
+                holder.timeSpentTitleTextView.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
