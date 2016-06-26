@@ -17,14 +17,22 @@ import com.rene.pomodorotrello.model.Card;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public class TasksFragment extends Fragment implements TasksFragmentView {
 
     static final String LIST_ID = "listId";
 
     private int listId = Constants.TO_DO_ID;
 
-    private RecyclerView listRecyclerView;
-    private TextView warningTextView;
+    @BindView(R.id.todo_recycler_view)
+    RecyclerView listRecyclerView;
+    @BindView(R.id.warning_text_view)
+    TextView warningTextView;
+
+    private Unbinder unbinder;
 
     private TasksFragmentPresenter tasksFragmentPresenter;
 
@@ -44,9 +52,8 @@ public class TasksFragment extends Fragment implements TasksFragmentView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tasks, container, false);
+        unbinder = ButterKnife.bind(this, view);
 
-        warningTextView = (TextView) view.findViewById(R.id.warning_text_view);
-        listRecyclerView = (RecyclerView) view.findViewById(R.id.todo_recycler_view);
         listRecyclerView.setHasFixedSize(true);
 
         RecyclerView.LayoutManager listLayoutManager = new LinearLayoutManager(getActivity());
@@ -88,6 +95,12 @@ public class TasksFragment extends Fragment implements TasksFragmentView {
     public void onDestroy() {
         super.onDestroy();
         tasksFragmentPresenter.onDestroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }
 

@@ -18,25 +18,41 @@ import com.rene.pomodorotrello.util.Constants;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 import static com.rene.pomodorotrello.R.id.doing_spinner;
 
 @SuppressWarnings("unchecked")
 public class PomodoroFragment extends Fragment implements AdapterView.OnItemSelectedListener, PomodoroFragmentView {
 
-    private Spinner doingListSpinner;
+    @BindView(R.id.doing_spinner)
+    Spinner doingListSpinner;
     private ArrayAdapter doingListSpinnerAdapter;
 
-    private TextView selectTask;
-    private TextView totalTimeTextView;
-    private TextView pomodorosSpentTextView;
-    private TextView timerTextView;
+    @BindView(R.id.select_text_view)
+    TextView selectTask;
+    @BindView(R.id.total_time_value_text_view)
+    TextView totalTimeTextView;
+    @BindView(R.id.pomodoros_spent_value_text_view)
+    TextView pomodorosSpentTextView;
+    @BindView(R.id.timer)
+    TextView timerTextView;
     private CountDownTimer countDownTimer;
-    private Button startPauseButton;
+    @BindView(R.id.start_pause_button)
+    Button startPauseButton;
 
-    private Button backButton;
-    private Button doneButton;
-    private Button shortBreakButton;
-    private Button longBreakButton;
+    @BindView(R.id.back_button)
+    Button backButton;
+    @BindView(R.id.done_button)
+    Button doneButton;
+    @BindView(R.id.short_break_button)
+    Button shortBreakButton;
+    @BindView(R.id.long_break_button)
+    Button longBreakButton;
+
+    private Unbinder unbinder;
 
     //Used to avoid calling spinner's onItemSelected in initialization
     boolean userIsInteracting;
@@ -63,7 +79,12 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pomodoro, container, false);
 
-        initViews(view);
+        unbinder = ButterKnife.bind(this, view);
+
+        doingListSpinner.setOnItemSelectedListener(this);
+        doingListSpinnerAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item);
+
+        initCardDetails(view);
 
         pomodoroFragmentPresenter = new PomodoroFragmentPresenterImpl(this);
         pomodoroFragmentPresenter.onInit();
@@ -75,24 +96,8 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
         return view;
     }
 
-    private void initViews(View view) {
-        selectTask = (TextView) view.findViewById(R.id.select_text_view);
-
-        doingListSpinner = (Spinner) view.findViewById(R.id.doing_spinner);
-        doingListSpinner.setOnItemSelectedListener(this);
-
-        doingListSpinnerAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item);
-
-        initCardDetails(view);
-    }
-
     private void initCardDetails(View view) {
 
-        totalTimeTextView = (TextView) view.findViewById(R.id.total_time_value_text_view);
-        pomodorosSpentTextView = (TextView) view.findViewById(R.id.pomodoros_spent_value_text_view);
-        timerTextView = (TextView) view.findViewById(R.id.timer);
-
-        startPauseButton = (Button) view.findViewById(R.id.start_pause_button);
         startPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,7 +105,7 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
             }
         });
 
-        Button stopButton = (Button) view.findViewById(R.id.stop_button);
+        Button stopButton = ButterKnife.findById(view, R.id.stop_button);
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,7 +117,6 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
             }
         });
 
-        backButton = (Button) view.findViewById(R.id.back_button);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,7 +125,6 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
             }
         });
 
-        doneButton = (Button) view.findViewById(R.id.done_button);
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,7 +133,6 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
             }
         });
 
-        shortBreakButton = (Button) view.findViewById(R.id.short_break_button);
         shortBreakButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,7 +140,6 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
             }
         });
 
-        longBreakButton = (Button) view.findViewById(R.id.long_break_button);
         longBreakButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -350,5 +351,11 @@ public class PomodoroFragment extends Fragment implements AdapterView.OnItemSele
     public void onDestroy() {
         super.onDestroy();
         pomodoroFragmentPresenter.onDestroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

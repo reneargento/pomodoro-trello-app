@@ -15,6 +15,10 @@ import com.rene.pomodorotrello.R;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 import static com.rene.pomodorotrello.R.id.board_spinner;
 import static com.rene.pomodorotrello.R.id.connect_config_button;
 import static com.rene.pomodorotrello.R.id.doing_spinner;
@@ -26,17 +30,24 @@ import static com.rene.pomodorotrello.R.id.todo_spinner;
 @SuppressWarnings("unchecked")
 public class ConfigFragment extends Fragment implements AdapterView.OnItemSelectedListener, ConfigFragmentView {
 
-    private Spinner boardSpinner;
-    private Spinner toDoListSpinner;
-    private Spinner doingListSpinner;
-    private Spinner doneListSpinner;
+    @BindView(board_spinner)
+    Spinner boardSpinner;
+    @BindView(todo_spinner)
+    Spinner toDoListSpinner;
+    @BindView(doing_spinner)
+    Spinner doingListSpinner;
+    @BindView(done_spinner)
+    Spinner doneListSpinner;
+
+    private Unbinder unbinder;
 
     private ArrayAdapter boardSpinnerAdapter;
     private ArrayAdapter toDoListSpinnerAdapter;
     private ArrayAdapter doingListSpinnerAdapter;
     private ArrayAdapter doneListSpinnerAdapter;
 
-    private Button connectButton;
+    @BindView(connect_config_button)
+    Button connectButton;
 
     //Used to avoid calling spinner's onItemSelected in initialization
     boolean isUserInteracting;
@@ -65,10 +76,7 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
     private void initSpinners(View view) {
 
         if (view != null) {
-            boardSpinner = (Spinner) view.findViewById(board_spinner);
-            toDoListSpinner = (Spinner) view.findViewById(todo_spinner);
-            doingListSpinner = (Spinner) view.findViewById(doing_spinner);
-            doneListSpinner = (Spinner) view.findViewById(done_spinner);
+            unbinder = ButterKnife.bind(this, view);
 
             boardSpinner.setOnItemSelectedListener(this);
             toDoListSpinner.setOnItemSelectedListener(this);
@@ -84,7 +92,7 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
 
     private void initOtherElements(View view) {
         if (view != null) {
-            Button saveButton = (Button) view.findViewById(save_config_button);
+            Button saveButton = ButterKnife.findById(view, save_config_button);
 
             saveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -98,7 +106,6 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
                 }
             });
 
-            connectButton = (Button) view.findViewById(connect_config_button);
             connectButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -194,5 +201,11 @@ public class ConfigFragment extends Fragment implements AdapterView.OnItemSelect
     public void onDestroy() {
         super.onDestroy();
         configFragmentPresenter.onDestroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

@@ -17,6 +17,9 @@ import com.rene.pomodorotrello.model.Card;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by rene on 6/19/16.
  */
@@ -28,18 +31,18 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.card_name)
         TextView nameTextView;
+        @BindView(R.id.start_task_button)
         Button startButton;
+        @BindView(R.id.time_spent_title)
         TextView timeSpentTitleTextView;
+        @BindView(R.id.time_spent)
         TextView timeSpentTextView;
 
         ViewHolder(View view) {
             super(view);
-
-            nameTextView = (TextView) view.findViewById(R.id.card_name);
-            startButton = (Button) view.findViewById(R.id.start_task_button);
-            timeSpentTitleTextView = (TextView) view.findViewById(R.id.time_spent_title);
-            timeSpentTextView = (TextView) view.findViewById(R.id.time_spent);
+            ButterKnife.bind(this, view);
         }
     }
 

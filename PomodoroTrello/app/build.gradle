@@ -37,8 +37,10 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.1.1'
     compile "com.mixpanel.android:mixpanel-android:4.6.2"
     compile "com.google.android.gms:play-services:8.1.0"
+    compile 'com.jakewharton:butterknife:8.1.0'
+    apt 'com.jakewharton:butterknife-compiler:8.1.0'
     testCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
     androidTestCompile 'com.android.support.test:runner:0.4.1'
-    androidTestCompile 'com.android.support:support-annotations:23.1.1'
+    androidTestCompile 'com.android.support:support-annotations:23.3.0'
 }
