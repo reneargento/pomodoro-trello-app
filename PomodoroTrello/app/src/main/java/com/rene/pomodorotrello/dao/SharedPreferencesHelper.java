@@ -3,8 +3,6 @@ package com.rene.pomodorotrello.dao;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.rene.pomodorotrello.R;
-
 import static com.rene.pomodorotrello.application.PomodoroTrelloApplication.getContext;
 
 /**

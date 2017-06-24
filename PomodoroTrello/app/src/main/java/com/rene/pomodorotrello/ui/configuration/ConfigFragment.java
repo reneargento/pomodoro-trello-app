@@ -26,7 +26,6 @@ import static com.rene.pomodorotrello.R.id.done_spinner;
 import static com.rene.pomodorotrello.R.id.save_config_button;
 import static com.rene.pomodorotrello.R.id.todo_spinner;
 
-
 @SuppressWarnings("unchecked")
 public class ConfigFragment extends Fragment implements AdapterView.OnItemSelectedListener, ConfigFragmentView {
 

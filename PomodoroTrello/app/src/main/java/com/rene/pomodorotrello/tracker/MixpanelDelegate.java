@@ -22,9 +22,9 @@ import static com.rene.pomodorotrello.application.PomodoroTrelloApplication.getC
 
 public class MixpanelDelegate {
 
-    public final static String MIXPANEL_TOKEN = "d66097529dff5199ae693c71130efc7b";
-    public final static String MIXPANEL_USER_ID = "AdvertisingId";
-    public final static String MIXPANEL_INSTALL_APP_EVENT = "Install App";
+    private final static String MIXPANEL_TOKEN = "d66097529dff5199ae693c71130efc7b";
+    private final static String MIXPANEL_USER_ID = "AdvertisingId";
+    private final static String MIXPANEL_INSTALL_APP_EVENT = "Install App";
     public final static String MIXPANEL_OPEN_APP_EVENT = "Open App";
     public final static String MIXPANEL_ACCESSED_CONFIG_EVENT = "Accessed Config Screen";
     public final static String MIXPANEL_ACCESSED_TASKS_EVENT = "Accessed Tasks Screen";
@@ -84,35 +84,37 @@ public class MixpanelDelegate {
 
     private static void getAdvertisingIdClient() {
 
-        AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                AdvertisingIdClient.Info idInfo = null;
-                try {
-                    idInfo = AdvertisingIdClient.getAdvertisingIdInfo(getContext());
-                } catch (GooglePlayServicesNotAvailableException e) {
-                    e.printStackTrace();
-                } catch (GooglePlayServicesRepairableException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                String advertisingId = null;
-
-                if (idInfo != null) {
-                    advertisingId = idInfo.getId();
-                }
-
-                return advertisingId;
-            }
-
-            @Override
-            protected void onPostExecute(String advertisingId) {
-                logInstall(advertisingId);
-            }
-
-        };
+        AsyncTask<Void, Void, String> task = new AdvertisingIdClientTask();
         task.execute();
+    }
+
+    private static class AdvertisingIdClientTask extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... params) {
+            AdvertisingIdClient.Info idInfo = null;
+            try {
+                idInfo = AdvertisingIdClient.getAdvertisingIdInfo(getContext());
+            } catch (GooglePlayServicesNotAvailableException e) {
+                e.printStackTrace();
+            } catch (GooglePlayServicesRepairableException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            String advertisingId = null;
+
+            if (idInfo != null) {
+                advertisingId = idInfo.getId();
+            }
+
+            return advertisingId;
+        }
+
+        @Override
+        protected void onPostExecute(String advertisingId) {
+            logInstall(advertisingId);
+        }
     }
 
 }
